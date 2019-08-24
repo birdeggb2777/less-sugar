@@ -1,0 +1,138 @@
+﻿<span style="font-size: large;">運用鍵盤上的W、A、S、D按鍵，幫助主角吃到方糖燒烤吧！</span>
+<canvas height="750" id="game" width="750"></canvas>
+<script>
+    let oCanvas = document.getElementById("game"),
+        ctx = oCanvas.getContext("2d");
+    window.addEventListener('keydown', KeyDown, true);
+    window.addEventListener('keyup', KeyUp, true);
+    let myX = 50, myY = 50;
+    let myW = 45, myH = 45;
+    let TX = [50, 650, 550, 100, 50, 150, 600, 150, 100,
+        50, 450, 300, 250, 200, 100, 650, 450, 400, 500],
+        TY = [200, 400, 250, 450, 500, 100, 650, 600, 300,
+            650, 500, 550, 50, 450, 50, 100, 200, 100, 100];
+    let TW = 50,
+        TH = 50;
+    let upCount = 0;
+    let win = false;
+    let meRight = false, meLeft = false, meUp = false, meDown = false;
+    {
+        for (var i = 0; i < 750; i += 50) {
+            TX.push(i);
+            TY.push(0);
+        }
+        for (var i = 0; i < 750; i += 50) {
+            TX.push(i);
+            TY.push(750 - 50);
+        }
+        for (var i = 0; i < 750; i += 50) {
+            TX.push(0);
+            TY.push(i);
+        }
+        for (var i = 0; i < 750; i += 50) {
+            TX.push(750 - 50);
+            TY.push(i);
+        }
+        var timeoutID = window.setInterval(function () {
+            if (win == true) return;
+            let speed = 1;
+            if (meUp == true) {
+                if (upCount <= 10 && pounch0(myX, myY - speed, myW, myH) == false) {
+                    myY -= speed;
+                }
+                else {
+                    meUp = false;
+                }
+            }
+            if (meRight == true) {
+                if (pounch0(myX + speed, myY, myW, myH) == false) {
+                    myX += speed;
+                } else {
+                    meRight = false;
+                }
+            }
+            if (meLeft == true) {
+                if (pounch0(myX - speed, myY, myW, myH) == false) {
+                    myX -= speed;
+                } else {
+                    meLeft = false;
+                }
+            }
+            if (meDown == true) {
+                if (pounch0(myX, myY + speed, myW, myH) == false) {
+                    myY += speed;
+                } else {
+                    meDown = false;
+                }
+            }
+            if (pounch(myX, myY, myW, myH, 200, 600, 1, 10) == true) {
+                win = true;
+                alert("win");
+            }
+        }, 1);
+        var timeoutID = window.setInterval(function () {
+            ctx.beginPath();
+
+            ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
+            ctx.fillStyle = "red";
+            ctx.rect(myX, myY, myW, myH);
+            ctx.fill();
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = "#FF0000";
+            ctx.rect(200, 600, TW, TH);
+            ctx.stroke();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = "#222222";
+            for (var i = 0; i < TX.length; i++) {
+                ctx.rect(TX[i], TY[i], TW, TH);
+            }
+            ctx.stroke();
+            ctx.closePath();
+
+        }, 20);
+    };
+    function KeyDown(e) {
+        var keyID = e.keyCode ? e.keyCode : e.which;
+        if (meUp == false && meRight == false && meDown == false && meLeft == false) {
+            if (keyID === 38 || keyID === 87) { // up arrow and W 
+                meUp = true;
+            }
+            if (keyID === 39 || keyID === 68) { // right arrow and D 
+                meRight = true;
+            }
+            if (keyID === 40 || keyID === 83) { // down arrow and S 
+                meDown = true;
+            }
+            if (keyID === 37 || keyID === 65) { // left arrow and A 
+                meLeft = true;
+            }
+        }
+    }
+    function KeyUp(e) {
+        /*var keyID = e.keyCode ? e.keyCode : e.which;
+        if (keyID === 38 || keyID === 87) { // up arrow and W 
+            meUp = false;
+        }
+        if (keyID === 39 || keyID === 68) { // right arrow and D 
+            meRight = false;
+        }
+        if (keyID === 40 || keyID === 83) { // down arrow and S 
+            meDown = false;
+        }
+        if (keyID === 37 || keyID === 65) { // left arrow and A 
+            meLeft = false;
+        }*/
+    }
+
+    function pounch(x, y, w, h, x2, y2, w2, h2) {
+        if (y + h >= y2 && x + w >= x2 && y < y2 + h2 && x < x2 + w2)
+            return true;
+        return false;
+    }
+    function pounch0(x, y, w, h) {
+        for (var i = 0; i < TX.length; i++)
+            if (pounch(x, y, w, h, TX[i], TY[i], TW, TH) == true)
+                return true;
+        return false;
+    }
+</script>
