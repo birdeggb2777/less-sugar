@@ -1,5 +1,5 @@
-﻿<span style="font-size: large;">運用鍵盤上的W、A、S、D按鍵，幫助主角吃到方糖燒烤吧！</span>
-<canvas height="750" id="game" width="750"></canvas>
+﻿<span style="font-size: large;"></span>
+<canvas height="550" id="game" width="750"></canvas>
 <script>
     //new editer asd741
     let oCanvas = document.getElementById("game"),
@@ -8,7 +8,7 @@
     window.addEventListener('keyup', KeyUp, true);
     let Me = {
         myX: 50,
-        myY: 600,
+        myY: 400,
         myW: 45,
         myH: 45,
         meRight: false,
@@ -20,13 +20,35 @@
     let blocks = {
         yellow:
         {
-            pointX: [50, 100, 150, 200, 250, 300, 350, 400, 450],
-            pointY: [650, 650, 650, 650, 650, 650, 650, 650, 650]
+            pointX: [50, 100, 150, 200, 250, 300, 350, 400, 450,
+                950, 1000, 1050, 1100, 1250, 1350,
+                1450, 1500, 1600, 1750, 1800, 1850, 1900, 1950, 2000
+            ],
+            pointY: [450, 450, 450, 450, 450, 450, 450, 450, 450,
+                220, 220, 220, 220, 220, 220,
+                450, 450, 320, 430, 430, 430, 430, 430, 430
+            ]
         },
         blue:
         {
-            pointX: [550],
-            pointY: [580]
+            pointX: [550, 700, 850, 1400,
+                1550],
+            pointY: [380, 320, 260, 220,
+                350]
+        },
+        red2:
+        {
+            pointX: [550, 600, 650, 700, 750, 800, 850, 900, 500,
+
+                1470, 1520, 1570, 1620],
+            pointY: [450, 450, 450, 450, 450, 450, 450, 450, 450,
+
+                210, 210, 210, 210]
+        },
+        green:
+        {
+            pointX: [2050],
+            pointY: [430]
         }
     }
     let TX = [500, 600, 400, 200, 150, 100, 50, 100],
@@ -67,14 +89,39 @@
         }
         if (Me.meRight == true) {
             if (pounch0(Me.myX + speed, Me.myY, Me.myW, Me.myH) == false) {
-                Me.myX += speed;
+                if (Me.myX <= 450) { Me.myX += speed; }
+                else {
+                    for (var i in blocks.blue.pointX) {
+                        blocks.blue.pointX[i] -= 1;
+                    }
+                    for (var i in blocks.red2.pointX) {
+                        blocks.red2.pointX[i] -= 1;
+                    }
+                    for (var i in blocks.green.pointX) {
+                        blocks.green.pointX[i] -= 1;
+                    }
+                    for (var i in blocks.yellow.pointX) {
+                        blocks.yellow.pointX[i] -= 1;
+                    }
+                }
             } else {
                 //   Me.meRight = false;
             }
         }
         if (Me.meLeft == true) {
             if (pounch0(Me.myX - speed, Me.myY, Me.myW, Me.myH) == false) {
-                Me.myX -= speed;
+                for (var i in blocks.blue.pointX) {
+                    blocks.blue.pointX[i] += 1;
+                }
+                for (var i in blocks.yellow.pointX) {
+                    blocks.yellow.pointX[i] += 1;
+                }
+                for (var i in blocks.red2.pointX) {
+                    blocks.red2.pointX[i] += 1;
+                }
+                for (var i in blocks.green.pointX) {
+                    blocks.green.pointX[i] += 1;
+                }
             } else {
                 // Me.meLeft = false;
             }
@@ -98,10 +145,14 @@
              alert("win");
          }*/
     }, 1);
-    var yelloImg = new Image();   // Create new img element
+    var yelloImg = new Image();
     yelloImg.src = 'yellow.png';
-    var blueImg = new Image();   // Create new img element
+    var blueImg = new Image();
     blueImg.src = 'blue.png';
+    var redImg2 = new Image();
+    redImg2.src = 'red2.png';
+    var greenImg = new Image();
+    greenImg.src = 'green.png';
     var timeoutID = window.setInterval(function () {
         ctx.beginPath();
 
@@ -126,7 +177,14 @@
             var block0 = blocks.blue;
             ctx.drawImage(blueImg, block0.pointX[i], block0.pointY[i], 50, 50);
         }
-
+        for (var i in blocks.red2.pointX) {
+            var block0 = blocks.red2;
+            ctx.drawImage(redImg2, block0.pointX[i], block0.pointY[i], 50, 50);
+        }
+        for (var i in blocks.green.pointX) {
+            var block0 = blocks.green;
+            ctx.drawImage(greenImg, block0.pointX[i], block0.pointY[i], 50, 50);
+        }
         ctx.stroke();
         // ctx.drawImage(yelloImg, 200, 200,50,50);
         ctx.closePath();
@@ -184,7 +242,23 @@
         for (var i in blocks.blue.pointX) {
             var block0 = blocks.blue;
             if (pounch(x, y, w, h, block0.pointX[i], block0.pointY[i], TW, TH) == true) {
-            block0.pointY[i] += 1;
+                if (block0.pointY[i] > Me.myY)
+                    block0.pointY[i] += 1;
+                return true;
+            }
+        }
+        for (var i in blocks.red2.pointX) {
+            var block0 = blocks.red2;
+            if (pounch(x, y, w, h, block0.pointX[i], block0.pointY[i], TW, TH) == true) {
+                win = true;
+                return true;
+            }
+        }
+        for (var i in blocks.green.pointX) {
+            var block0 = blocks.green;
+            if (pounch(x, y, w, h, block0.pointX[i], block0.pointY[i], TW, TH) == true) {
+                alert("win");
+                win = true;
                 return true;
             }
         }
