@@ -17,7 +17,18 @@
         meDown: false,
         autoDown: 0.5
     };
-
+    let blocks = {
+        yellow:
+        {
+            pointX: [50, 100, 150, 200, 250, 300, 350, 400, 450],
+            pointY: [650, 650, 650, 650, 650, 650, 650, 650, 650]
+        },
+        blue:
+        {
+            pointX: [550],
+            pointY: [580]
+        }
+    }
     let TX = [500, 600, 400, 200, 150, 100, 50, 100],
         TY = [620, 550, 500, 500, 500, 500, 550, 370];
     let TW = 50,
@@ -41,7 +52,7 @@
         TX.push(750 - 50);
         TY.push(i);
     }
-    var timeoutID = window.setInterval(function() {
+    var timeoutID = window.setInterval(function () {
         if (win == true) return;
         let speed = 1.5;
         if (Me.meUp == true) {
@@ -87,7 +98,11 @@
              alert("win");
          }*/
     }, 1);
-    var timeoutID = window.setInterval(function() {
+    var yelloImg = new Image();   // Create new img element
+    yelloImg.src = 'yellow.png';
+    var blueImg = new Image();   // Create new img element
+    blueImg.src = 'blue.png';
+    var timeoutID = window.setInterval(function () {
         ctx.beginPath();
 
         ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
@@ -100,10 +115,20 @@
          ctx.stroke();*/
         ctx.lineWidth = 3;
         ctx.strokeStyle = "#222222";
-        for (var i = 0; i < TX.length; i++) {
-            ctx.rect(TX[i], TY[i], TW, TH);
+        /* for (var i = 0; i < TX.length; i++) {
+             ctx.rect(TX[i], TY[i], TW, TH);
+         }*/
+        for (var i in blocks.yellow.pointX) {
+            var block0 = blocks.yellow;
+            ctx.drawImage(yelloImg, block0.pointX[i], block0.pointY[i], 50, 50);
         }
+        for (var i in blocks.blue.pointX) {
+            var block0 = blocks.blue;
+            ctx.drawImage(blueImg, block0.pointX[i], block0.pointY[i], 50, 50);
+        }
+
         ctx.stroke();
+        // ctx.drawImage(yelloImg, 200, 200,50,50);
         ctx.closePath();
 
     }, 20);
@@ -151,9 +176,18 @@
     }
 
     function pounch0(x, y, w, h) {
-        for (var i = 0; i < TX.length; i++)
-            if (pounch(x, y, w, h, TX[i], TY[i], TW, TH) == true)
+        for (var i in blocks.yellow.pointX) {
+            var block0 = blocks.yellow;
+            if (pounch(x, y, w, h, block0.pointX[i], block0.pointY[i], TW, TH) == true)
                 return true;
+        }
+        for (var i in blocks.blue.pointX) {
+            var block0 = blocks.blue;
+            if (pounch(x, y, w, h, block0.pointX[i], block0.pointY[i], TW, TH) == true) {
+            block0.pointY[i] += 1;
+                return true;
+            }
+        }
         return false;
     }
 </script>
