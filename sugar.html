@@ -18,10 +18,8 @@
         autoDown: 0.5
     };
 
-    let TX = [500, 600, 400, 200, 150, 100, 50,100
-    ],
-        TY = [620, 550, 500, 500, 500, 500, 550,370
-        ];
+    let TX = [500, 600, 400, 200, 150, 100, 50, 100],
+        TY = [620, 550, 500, 500, 500, 500, 550, 370];
     let TW = 50,
         TH = 50;
     let upCount = 0;
@@ -43,7 +41,7 @@
         TX.push(750 - 50);
         TY.push(i);
     }
-    var timeoutID = window.setInterval(function () {
+    var timeoutID = window.setInterval(function() {
         if (win == true) return;
         let speed = 1.5;
         if (Me.meUp == true) {
@@ -89,7 +87,7 @@
              alert("win");
          }*/
     }, 1);
-    var timeoutID = window.setInterval(function () {
+    var timeoutID = window.setInterval(function() {
         ctx.beginPath();
 
         ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
