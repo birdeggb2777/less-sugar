@@ -1,5 +1,6 @@
 ﻿<span style="font-size: large;"></span>
 <canvas height="550" id="game" width="750"></canvas>
+<input type="button" value="重新開始" onclick="restart();">
 <script>
     //new editer asd741
     let oCanvas = document.getElementById("game"),
@@ -251,6 +252,8 @@
             var block0 = blocks.red2;
             if (pounch(x, y, w, h, block0.pointX[i], block0.pointY[i], TW, TH) == true) {
                 win = true;
+                alert("fail");
+                restart();
                 return true;
             }
         }
@@ -264,4 +267,53 @@
         }
         return false;
     }
+    function restart() {
+        Me = {
+            myX: 50,
+            myY: 400,
+            myW: 45,
+            myH: 45,
+            meRight: false,
+            meLeft: false,
+            meUp: false,
+            meDown: false,
+            autoDown: 0.5
+        };
+        blocks = {
+        yellow:
+        {
+            pointX: [50, 100, 150, 200, 250, 300, 350, 400, 450,
+                950, 1000, 1050, 1100, 1250, 1350,
+                1450, 1500, 1600, 1750, 1800, 1850, 1900, 1950, 2000
+            ],
+            pointY: [450, 450, 450, 450, 450, 450, 450, 450, 450,
+                220, 220, 220, 220, 220, 220,
+                450, 450, 320, 430, 430, 430, 430, 430, 430
+            ]
+        },
+        blue:
+        {
+            pointX: [550, 700, 850, 1400,
+                1550],
+            pointY: [380, 320, 260, 220,
+                350]
+        },
+        red2:
+        {
+            pointX: [550, 600, 650, 700, 750, 800, 850, 900, 500,
+
+                1470, 1520, 1570, 1620],
+            pointY: [450, 450, 450, 450, 450, 450, 450, 450, 450,
+
+                210, 210, 210, 210]
+        },
+        green:
+        {
+            pointX: [2050],
+            pointY: [430]
+        }
+    }
+        win = false;
+    }
+    
 </script>
