@@ -1,8 +1,28 @@
-﻿<span style="font-size: large;"></span>
-<canvas height="550" id="game" width="750"></canvas>
-<input type="button" value="重新開始" onclick="restart();">
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>sugar</title>
+    <style>
+        body {
+            text-align: center;
+            padding-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <span style="font-size: large;"></span>
+    <canvas height="550" id="game" width="750"></canvas>
+    <input type="button" value="重新開始" onclick="restart();">
+</body>
+
+</html>
+
 <script>
-    //new editer asd741
     let oCanvas = document.getElementById("game"),
         ctx = oCanvas.getContext("2d");
     window.addEventListener('keydown', KeyDown, true);
@@ -19,8 +39,7 @@
         autoDown: 0.5
     };
     let blocks = {
-        yellow:
-        {
+        yellow: {
             pointX: [50, 100, 150, 200, 250, 300, 350, 400, 450,
                 950, 1000, 1050, 1100, 1250, 1350,
                 1450, 1500, 1600, 1750, 1800, 1850, 1900, 1950, 2000
@@ -30,24 +49,25 @@
                 450, 450, 320, 430, 430, 430, 430, 430, 430
             ]
         },
-        blue:
-        {
+        blue: {
             pointX: [550, 700, 850, 1400,
-                1550],
+                1550
+            ],
             pointY: [380, 320, 260, 220,
-                350]
+                350
+            ]
         },
-        red2:
-        {
+        red2: {
             pointX: [550, 600, 650, 700, 750, 800, 850, 900, 500,
 
-                1470, 1520, 1570, 1620],
+                1470, 1520, 1570, 1620
+            ],
             pointY: [450, 450, 450, 450, 450, 450, 450, 450, 450,
 
-                210, 210, 210, 210]
+                210, 210, 210, 210
+            ]
         },
-        green:
-        {
+        green: {
             pointX: [2050],
             pointY: [430]
         }
@@ -75,10 +95,10 @@
         TX.push(750 - 50);
         TY.push(i);
     }
-    var timeoutID = window.setInterval(function () {
+    var timeoutID = window.setInterval(function() {
         if (win == true) return;
         let speed = 1.5;
-        if (Me.myY>= 600) {
+        if (Me.myY >= 600) {
             alert("fail");
             restart();
         }
@@ -95,8 +115,9 @@
 
         if (Me.meRight == true) {
             if (pounch0(Me.myX + speed, Me.myY, Me.myW, Me.myH) == false) {
-                if (Me.myX <= 450) { Me.myX += speed; }
-                else {
+                if (Me.myX <= 450) {
+                    Me.myX += speed;
+                } else {
                     for (var i in blocks.blue.pointX) {
                         blocks.blue.pointX[i] -= 1;
                     }
@@ -159,7 +180,7 @@
     redImg2.src = 'red2.png';
     var greenImg = new Image();
     greenImg.src = 'green.png';
-    var timeoutID = window.setInterval(function () {
+    var timeoutID = window.setInterval(function() {
         ctx.beginPath();
 
         ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
@@ -256,9 +277,11 @@
         for (var i in blocks.red2.pointX) {
             var block0 = blocks.red2;
             if (pounch(x, y, w, h, block0.pointX[i], block0.pointY[i], TW, TH) == true) {
-                win = true;
-                alert("fail");
-                restart();
+                if (block0.pointY[i] > Me.myY) {
+                    win = true;
+                    alert("fail");
+                    restart();
+                }
                 return true;
             }
         }
@@ -272,6 +295,7 @@
         }
         return false;
     }
+
     function restart() {
         Me = {
             myX: 50,
@@ -285,8 +309,7 @@
             autoDown: 0.5
         };
         blocks = {
-            yellow:
-            {
+            yellow: {
                 pointX: [50, 100, 150, 200, 250, 300, 350, 400, 450,
                     950, 1000, 1050, 1100, 1250, 1350,
                     1450, 1500, 1600, 1750, 1800, 1850, 1900, 1950, 2000
@@ -296,29 +319,29 @@
                     450, 450, 320, 430, 430, 430, 430, 430, 430
                 ]
             },
-            blue:
-            {
+            blue: {
                 pointX: [550, 700, 850, 1400,
-                    1550],
+                    1550
+                ],
                 pointY: [380, 320, 260, 220,
-                    350]
+                    350
+                ]
             },
-            red2:
-            {
+            red2: {
                 pointX: [550, 600, 650, 700, 750, 800, 850, 900, 500,
 
-                    1470, 1520, 1570, 1620],
+                    1470, 1520, 1570, 1620
+                ],
                 pointY: [450, 450, 450, 450, 450, 450, 450, 450, 450,
 
-                    210, 210, 210, 210]
+                    210, 210, 210, 210
+                ]
             },
-            green:
-            {
+            green: {
                 pointX: [2050],
                 pointY: [430]
             }
         }
         win = false;
     }
-
 </script>
