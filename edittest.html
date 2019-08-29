@@ -1,0 +1,280 @@
+﻿<span style="font-size: large;"></span>
+<canvas height="550" id="game" width="750"></canvas>
+<img src="yellow.png" alt="yellow" onclick="chooseColor='yellow';">
+<img src="green.png" alt="green" onclick="chooseColor='green';">
+<img src="red2.png" alt="red2" onclick="chooseColor='red2';">
+<img src="blue.png" alt="blue" onclick="chooseColor='blue';">
+<input type="button" value="重新開始" onclick="restart();">
+<script>
+    //new editer asd741
+    let rulerPoint = 0;
+    let chooseColor = '';
+    let chooseX = 0;
+    let chooseY = 0;
+    let downCheck = false;
+    let placeDirection = [0, 0];
+    let oCanvas = document.getElementById("game"),
+        oCtx = oCanvas.getContext("2d");
+
+    let yelloImg = new Image();
+    yelloImg.src = 'yellow.png';
+    let blueImg = new Image();
+    blueImg.src = 'blue.png';
+    let redImg2 = new Image();
+    redImg2.src = 'red2.png';
+    let greenImg = new Image();
+    greenImg.src = 'green.png';
+
+    window.addEventListener('keydown', KeyDown, true);
+    window.addEventListener('keyup', KeyUp, true);
+    oCanvas.addEventListener("mousedown", MouseDown, true);
+    oCanvas.addEventListener("mousemove", MouseMove, true);
+    oCanvas.addEventListener("mouseup", MouseUp, true);
+    let tempDrawing = function () { };
+    function pounch(x, y, w, h, x2, y2, w2, h2) {
+        if (y + h >= y2 && x + w >= x2 && y < y2 + h2 && x < x2 + w2)
+            return true;
+        return false;
+    }
+    let AllObject = [
+        {
+            name: "Me",
+            pointX: 50,
+            pointY: 400,
+            width: 45,
+            height: 45,
+            path: [0, 0],
+            code: function () {
+                this.pointX += this.path[0];
+                this.pointY += this.path[1];
+            },
+            registerDraw: function () {
+                oCtx.beginPath();
+                oCtx.fillStyle = "red";
+                oCtx.rect(this.pointX, this.pointY, this.width, this.height);
+                oCtx.fill();
+                oCtx.closePath();
+            },
+            registerKeyDown: function (key) {
+                if ((key === 38 || key === 87) /*|| pounch0(Me.myX, Me.myY + 2, Me.myW, Me.myH) == true*/) { // up arrow and W 
+                    this.path[1] = -1;
+                }
+                if (key === 39 || key === 68) { // right arrow and D 
+                    placeDirection[0] = -1;
+                }
+                if (key === 40 || key === 83) { // down arrow and S 
+                    this.path[1] = 1;
+                }
+                if (key === 37 || key === 65) { // left arrow and A 
+                    placeDirection[0] = 1;
+                }
+            },
+            registerKeyUp: function (key) {
+                if ((key === 38 || key === 87) /*|| pounch0(Me.myX, Me.myY + 2, Me.myW, Me.myH) == true*/) { // up arrow and W 
+                    this.path[1] = 0;
+                }
+                if (key === 39 || key === 68) { // right arrow and D 
+                    placeDirection[0] = 0;
+                }
+                if (key === 40 || key === 83) { // down arrow and S 
+                    this.path[1] = 0;
+                }
+                if (key === 37 || key === 65) { // left arrow and A 
+                    placeDirection[0] = 0;
+                }
+            }
+        },
+        {
+            name: "yellowblock",
+            pointX: 150,
+            pointY: 400,
+            width: 45,
+            height: 45,
+            path: [0, 0],
+            Image: yelloImg,
+            code: function () {
+                this.pointX += placeDirection[0];
+                this.pointY += placeDirection[1];
+            },
+            registerDraw: function () {
+                oCtx.beginPath();
+                oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
+                oCtx.closePath();
+            }
+        }
+    ]
+    function KeyDown(e) {
+        var keyID = e.keyCode ? e.keyCode : e.which;
+        for (var i in AllObject) {
+            if (AllObject[i].registerKeyDown) {
+                AllObject[i].registerKeyDown(keyID);
+            }
+        }
+    }
+    function KeyUp(e) {
+        var keyID = e.keyCode ? e.keyCode : e.which;
+        for (var i in AllObject) {
+            if (AllObject[i].registerKeyUp) {
+                AllObject[i].registerKeyUp(keyID);
+            }
+        }
+    }
+    var timeoutCode = window.setInterval(function () {
+        for (var i in AllObject) {
+            if (AllObject[i].code) {
+                AllObject[i].code();
+            }
+        }
+    });
+    var timeoutDraw = window.setInterval(function () {
+        oCtx.clearRect(0, 0, oCanvas.width, oCanvas.height);
+        for (var i in AllObject) {
+            if (AllObject[i].registerDraw) {
+                AllObject[i].registerDraw();
+            }
+        }
+        tempDrawing();
+    });
+
+    function MouseDown(e) {
+        chooseX = e.clientX;
+        chooseY = e.clientY;
+        downCheck = true;
+    }
+    function MouseMove(e) {
+        chooseX = e.clientX;
+        chooseY = e.clientY;
+        if (chooseColor == 'yellow') {
+            tempDrawing = function () { oCtx.drawImage(yelloImg, e.clientX - 25, e.clientY - 25, 45, 45); }
+        }
+        else if (chooseColor == 'red2') {
+            tempDrawing = function () { oCtx.drawImage(redImg2, e.clientX - 25, e.clientY - 25, 45, 45); }
+        }
+        if (chooseColor == 'blue') {
+            tempDrawing = function () { oCtx.drawImage(blueImg, e.clientX - 25, e.clientY - 25, 45, 45); }
+        }
+        if (chooseColor == 'green') {
+            tempDrawing = function () { oCtx.drawImage(greenImg, e.clientX - 25, e.clientY - 25, 45, 45); }
+        }
+
+    }
+    function MouseUp(e) {
+        tempDrawing = function () { };
+        chooseX = e.clientX;
+        chooseY = e.clientY;
+        let tempColor;
+
+        if (chooseColor == 'yellow') tempColor = yelloImg;
+        else if (chooseColor == 'red2') tempColor = redImg2;
+        else if (chooseColor == 'blue') tempColor = blueImg;
+        else if (chooseColor == 'green') tempColor = greenImg;
+
+        if (downCheck == true && chooseColor!='') {
+            downCheck = false;
+
+            var obj = {
+                name: "yellowblock",
+                pointX: chooseX - 25,
+                pointY: chooseY - 25,
+                width: 45,
+                height: 45,
+                path: [0, 0],
+                Image: tempColor,
+                code: function () {
+                    this.pointX += placeDirection[0];
+                    this.pointY += placeDirection[1];
+                },
+                registerDraw: function () {
+                    oCtx.beginPath();
+                    oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
+                    oCtx.closePath();
+                }
+            }
+            AllObject.push(obj);
+            chooseColor = '';
+        }
+    }
+
+    function pounch0(x, y, w, h) {
+        for (var i in blocks.yellow.pointX) {
+            var block0 = blocks.yellow;
+            if (pounch(x, y, w, h, block0.pointX[i], block0.pointY[i], TW, TH) == true)
+                return true;
+        }
+        for (var i in blocks.blue.pointX) {
+            var block0 = blocks.blue;
+            if (pounch(x, y, w, h, block0.pointX[i], block0.pointY[i], TW, TH) == true) {
+                if (block0.pointY[i] > Me.myY)
+                    block0.pointY[i] += 1;
+                return true;
+            }
+        }
+        for (var i in blocks.red2.pointX) {
+            var block0 = blocks.red2;
+            if (pounch(x, y, w, h, block0.pointX[i], block0.pointY[i], TW, TH) == true) {
+                win = true;
+                alert("fail");
+                restart();
+                return true;
+            }
+        }
+        for (var i in blocks.green.pointX) {
+            var block0 = blocks.green;
+            if (pounch(x, y, w, h, block0.pointX[i], block0.pointY[i], TW, TH) == true) {
+                alert("win");
+                win = true;
+                return true;
+            }
+        }
+        return false;
+    }
+   /* function restart() {
+             Me = {
+                 myX: 50,
+                 myY: 400,
+                 myW: 45,
+                 myH: 45,
+                 meRight: false,
+                 meLeft: false,
+                 meUp: false,
+                 meDown: false,
+                 autoDown: 0.5
+             };
+             blocks = {
+                 yellow:
+                 {
+                     pointX: [50, 100, 150, 200, 250, 300, 350, 400, 450,
+                         950, 1000, 1050, 1100, 1250, 1350,
+                         1450, 1500, 1600, 1750, 1800, 1850, 1900, 1950, 2000
+                     ],
+                     pointY: [450, 450, 450, 450, 450, 450, 450, 450, 450,
+                         220, 220, 220, 220, 220, 220,
+                         450, 450, 320, 430, 430, 430, 430, 430, 430
+                     ]
+                 },
+                 blue:
+                 {
+                     pointX: [550, 700, 850, 1400,
+                         1550],
+                     pointY: [380, 320, 260, 220,
+                         350]
+                 },
+                 red2:
+                 {
+                     pointX: [550, 600, 650, 700, 750, 800, 850, 900, 500,
+ 
+                         1470, 1520, 1570, 1620],
+                     pointY: [450, 450, 450, 450, 450, 450, 450, 450, 450,
+ 
+                         210, 210, 210, 210]
+                 },
+                 green:
+                 {
+                     pointX: [2050],
+                     pointY: [430]
+                 }
+             }
+             win = false;
+         }*/
+
+</script>
