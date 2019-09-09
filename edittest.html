@@ -1,12 +1,38 @@
 ﻿<span style="font-size: large;"></span>
 <canvas height="550" id="game" width="750"></canvas>
-<img src="yellow.png" alt="yellow" onclick="chooseColor='yellow';">
-<img src="green.png" alt="green" onclick="chooseColor='green';">
-<img src="red2.png" alt="red2" onclick="chooseColor='red2';">
-<img src="blue.png" alt="blue" onclick="chooseColor='blue';">
-<input type="button" value="重新開始" onclick="restart();">
+<img src="yellow.png" alt="yellow" onclick="chooseColor='yellow';setControl();" onchange="blockEdit();">
+<img src="green.png" alt="green" onclick="chooseColor='green';setControl();" onchange="blockEdit();">
+<img src="red2.png" alt="red2" onclick="chooseColor='red2';setControl();" onchange="blockEdit();">
+<img src="blue.png" alt="blue" onclick="chooseColor='blue';setControl();" onchange="blockEdit();">
+<form>
+    名稱：<input type="text" id="formName" value="yellow"><br>
+    座標X：<input type="text" id="formX" value="N"><br>
+    座標Y：<input type="text" id="formY" value="N"><br>
+    寬度：<input type="text" id="formWidth" value='50'><br>
+    高度：<input type="text" id="formHeight" value='50'><br>
+    路徑：<input type="text" disabled="disabled" id="formPath" value='yellow.png'><br>
+</form>
+<script>
+    function setControl() {
+        getByID("formName").value = chooseColor;
+        getByID("formPath").value = chooseColor + '.png ';
+    }
+    function getByID(id) {
+        return document.getElementById(id);
+    }
+    function blockEdit() {
+        if (chooseColor != 'edit') return;
+        AllObject[NowObj].name = getByID("formName").value;
+        AllObject[NowObj].pointX = parseInt(getByID('formX').value);
+        AllObject[NowObj].pointY = parseInt(getByID('formY').value);
+        AllObject[NowObj].width = parseInt(getByID('formWidth').value);
+        AllObject[NowObj].height = parseInt(getByID('formHeight').value);
+    }
+</script>
+<!--<input type="button" value="重新開始" onclick="restart();">-->
 <script>
     //new editer asd741
+    let NowObj = 0;
     let rulerPoint = 0;
     let chooseColor = '';
     let chooseX = 0;
@@ -16,6 +42,7 @@
     let oCanvas = document.getElementById("game"),
         oCtx = oCanvas.getContext("2d");
 
+    let tempImg = new Image();
     let yelloImg = new Image();
     yelloImg.src = 'yellow.png';
     let blueImg = new Image();
@@ -84,24 +111,24 @@
                 }
             }
         },
-        {
-            name: "yellowblock",
-            pointX: 150,
-            pointY: 400,
-            width: 45,
-            height: 45,
-            path: [0, 0],
-            Image: yelloImg,
-            code: function () {
-                this.pointX += placeDirection[0];
-                this.pointY += placeDirection[1];
-            },
-            registerDraw: function () {
-                oCtx.beginPath();
-                oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
-                oCtx.closePath();
-            }
-        }
+        /* {
+             name: "yellowblock",
+             pointX: 150,
+             pointY: 400,
+             width: 45,
+             height: 45,
+             path: [0, 0],
+             Image: yelloImg,
+             code: function () {
+                 this.pointX += placeDirection[0];
+                 this.pointY += placeDirection[1];
+             },
+             registerDraw: function () {
+                 oCtx.beginPath();
+                 oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
+                 oCtx.closePath();
+             }
+         }*/
     ]
     function KeyDown(e) {
         var keyID = e.keyCode ? e.keyCode : e.which;
@@ -140,44 +167,92 @@
         chooseX = e.clientX;
         chooseY = e.clientY;
         downCheck = true;
+        if (chooseColor == '') {
+            for (var i in AllObject) {
+                if (AllObject[i].pointX && AllObject[i].pointY && AllObject[i].width && AllObject[i].height) {
+                    if (pounch(chooseX, chooseY, 2, 2, AllObject[i].pointX, AllObject[i].pointY, AllObject[i].width + 25 / 2, AllObject[i].height + 25 / 2) == true) {
+                        chooseColor = 'move';
+                        getByID("formName").value = AllObject[i].name;
+                        getByID("formWidth").value = AllObject[i].width;
+                        getByID("formHeight").value = AllObject[i].height;
+                        tempImg = AllObject[i].Image;
+                        NowObj = i;
+                        // alert(NowObj);
+                        break;
+                    }
+                }
+            }
+        }
     }
     function MouseMove(e) {
+        downCheck = false;
         chooseX = e.clientX;
         chooseY = e.clientY;
+        var check = 0;
         if (chooseColor == 'yellow') {
             tempDrawing = function () { oCtx.drawImage(yelloImg, e.clientX - 25, e.clientY - 25, 45, 45); }
         }
         else if (chooseColor == 'red2') {
             tempDrawing = function () { oCtx.drawImage(redImg2, e.clientX - 25, e.clientY - 25, 45, 45); }
         }
-        if (chooseColor == 'blue') {
+        else if (chooseColor == 'blue') {
             tempDrawing = function () { oCtx.drawImage(blueImg, e.clientX - 25, e.clientY - 25, 45, 45); }
         }
-        if (chooseColor == 'green') {
+        else if (chooseColor == 'green') {
             tempDrawing = function () { oCtx.drawImage(greenImg, e.clientX - 25, e.clientY - 25, 45, 45); }
         }
-
+        else {
+            check = 1;
+        }
+        if (check == 0) {
+            getByID("formX").value = "" + chooseX;
+            getByID("formY").value = "" + chooseY;
+        }
+        else if (chooseColor == 'move' && AllObject[NowObj]) {
+            getByID("formX").value = "" + chooseX;
+            getByID("formY").value = "" + chooseY;
+            AllObject[NowObj].name = getByID("formName").value;
+            AllObject[NowObj].pointX = chooseX - 25;
+            AllObject[NowObj].pointY = chooseY - 25;
+            AllObject[NowObj].width = parseInt(getByID('formWidth').value);
+            AllObject[NowObj].height = parseInt(getByID('formHeight').value);
+        }
     }
     function MouseUp(e) {
         tempDrawing = function () { };
         chooseX = e.clientX;
         chooseY = e.clientY;
         let tempColor;
-
+        var check = 0;
         if (chooseColor == 'yellow') tempColor = yelloImg;
         else if (chooseColor == 'red2') tempColor = redImg2;
         else if (chooseColor == 'blue') tempColor = blueImg;
         else if (chooseColor == 'green') tempColor = greenImg;
-
-        if (downCheck == true && chooseColor!='') {
+        else check = 1;
+       /* if (downCheck == true) {
+            for (var i in AllObject) {
+                if (AllObject[i].pointX && AllObject[i].pointY && AllObject[i].width && AllObject[i].height) {
+                    if (pounch(chooseX, chooseY, 2, 2, AllObject[i].pointX, AllObject[i].pointY, AllObject[i].width + 25 / 2, AllObject[i].height + 25 / 2) == true) {
+                        chooseColor = 'edit';
+                        getByID("formName").value = AllObject[i].name;
+                        getByID("formWidth").value = AllObject[i].width;
+                        getByID("formHeight").value = AllObject[i].height;
+                        tempImg = AllObject[i].Image;
+                        NowObj = i;
+                        // alert(NowObj);
+                        break;
+                    }
+                }
+            }
+        }*/
+        if (check == 0) {
             downCheck = false;
-
             var obj = {
-                name: "yellowblock",
+                name: getByID("formName").value,
                 pointX: chooseX - 25,
                 pointY: chooseY - 25,
-                width: 45,
-                height: 45,
+                width: parseInt(getByID('formWidth').value),
+                height: parseInt(getByID('formHeight').value),
                 path: [0, 0],
                 Image: tempColor,
                 code: function () {
@@ -191,10 +266,19 @@
                 }
             }
             AllObject.push(obj);
-            chooseColor = '';
         }
+        else if (chooseColor == 'move' && AllObject[NowObj]) {
+            AllObject[NowObj].name = getByID("formName").value;
+            AllObject[NowObj].pointX = chooseX - 25;
+            AllObject[NowObj].pointY = chooseY - 25;
+            AllObject[NowObj].width = parseInt(getByID('formWidth').value);
+            AllObject[NowObj].height = parseInt(getByID('formHeight').value);
+        }
+        console.log(AllObject[NowObj]);
+        // if (AllObject[NowObj])
+        //alert(parseInt(getByID('formHeight').value));
+        chooseColor = '';
     }
-
     function pounch0(x, y, w, h) {
         for (var i in blocks.yellow.pointX) {
             var block0 = blocks.yellow;
@@ -228,53 +312,4 @@
         }
         return false;
     }
-   /* function restart() {
-             Me = {
-                 myX: 50,
-                 myY: 400,
-                 myW: 45,
-                 myH: 45,
-                 meRight: false,
-                 meLeft: false,
-                 meUp: false,
-                 meDown: false,
-                 autoDown: 0.5
-             };
-             blocks = {
-                 yellow:
-                 {
-                     pointX: [50, 100, 150, 200, 250, 300, 350, 400, 450,
-                         950, 1000, 1050, 1100, 1250, 1350,
-                         1450, 1500, 1600, 1750, 1800, 1850, 1900, 1950, 2000
-                     ],
-                     pointY: [450, 450, 450, 450, 450, 450, 450, 450, 450,
-                         220, 220, 220, 220, 220, 220,
-                         450, 450, 320, 430, 430, 430, 430, 430, 430
-                     ]
-                 },
-                 blue:
-                 {
-                     pointX: [550, 700, 850, 1400,
-                         1550],
-                     pointY: [380, 320, 260, 220,
-                         350]
-                 },
-                 red2:
-                 {
-                     pointX: [550, 600, 650, 700, 750, 800, 850, 900, 500,
- 
-                         1470, 1520, 1570, 1620],
-                     pointY: [450, 450, 450, 450, 450, 450, 450, 450, 450,
- 
-                         210, 210, 210, 210]
-                 },
-                 green:
-                 {
-                     pointX: [2050],
-                     pointY: [430]
-                 }
-             }
-             win = false;
-         }*/
-
 </script>
