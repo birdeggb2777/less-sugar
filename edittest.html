@@ -1,15 +1,19 @@
-﻿<span style='font-size: large;'></span>
-<canvas height='550' id='game' width='750'></canvas>
-<img src='yellow.png' alt='yellow' onclick="chooseColor='yellow';setControl();" onchange='blockEdit();'>
-<img src='green.png' alt='green' onclick="chooseColor='green';setControl();" onchange='blockEdit();'>
-<img src='red2.png' alt='red2' onclick="chooseColor='red2';setControl();" onchange='blockEdit();'>
-<img src='blue.png' alt='blue' onclick="chooseColor='blue';setControl();" onchange='blockEdit();'>
-<button onclick="clone()">輸出</button>
+﻿<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+<body style="padding-bottom:150px;">
+    <span style='font-size: large;'></span>
+    <canvas height='550' id='game' width='750'></canvas>
+    <img src='yellow.png' alt='yellow' onclick="chooseColor='yellow';setControl();" onchange='blockEdit();'>
+    <img src='green.png' alt='green' onclick="chooseColor='green';setControl();" onchange='blockEdit();'>
+    <img src='red2.png' alt='red2' onclick="chooseColor='red2';setControl();" onchange='blockEdit();'>
+    <img src='blue.png' alt='blue' onclick="chooseColor='blue';setControl();" onchange='blockEdit();'>
+    <button onclick="clone()" class="btn btn-secondary">輸出</button>
+</body>
 <script>
-        function clone(){
-            var str0="<span style='font-size: large;'></span>\
+    function clone() {
+        var str0 = "<span style='font-size: large;'></span>\
 <canvas height='550' id='game' width='750'></canvas>";
-            var str1=" <script>let NowObj = 0;\
+        var str1 = " <script>let NowObj = 0;\
     let rulerPoint = 0;\
     let chooseColor = '';\
     let chooseX = 0;\
@@ -46,8 +50,8 @@
             return true;\
         return false;\
     }"
-    let str2=""+(JSON.stringify(AllObject));
-    let str3=";function KeyDown(e) {                                   \
+        let str2 = "" + (JSON.stringify(AllObject));
+        let str3 = ";function KeyDown(e) {                                   \
         var keyID = e.keyCode ? e.keyCode : e.which;               \
         for (var i in AllObject) {                                 \
             if (AllObject[i].registerKeyDown) {                    \
@@ -83,27 +87,46 @@
                 AllObject[i].registerDraw();                       \
             }                                                      \
         }                                                          \
-        tempDrawing(); }) <\/script>";                                                         
-console.log(str0+str1+str2+str3);
-        }
+        tempDrawing(); }) <\/script>";
+        console.log(str0 + str1 + str2 + str3);
+    }
 </script>
-<form>
-    名稱：<input type='text' id='formName' value='yellow'><br>
-    座標X：<input type='text' id='formX' value='N'><br>
-    座標Y：<input type='text' id='formY' value='N'><br>
-    寬度：<input type='text' id='formWidth' value='50'><br>
-    高度：<input type='text' id='formHeight' value='50'><br>
-    路徑：<input type='text' disabled='disabled' id='formPath' value='yellow.png'><br>
+<form class="ml-5 w-25" style="min-width:456px;">
+    <div class="d-flex justify-content-around align-items-center mb-3">
+        <span>名稱：</span>
+        <input class="form-control w-75" type='text' id='formName' value='yellow'/>
+    </div>
+    <div class="d-flex justify-content-around align-items-center mb-3">
+        <span> 座標X：</span>
+        <input class="form-control w-75" type='text' id='formX' value='N'/>
+    </div>
+    <div class="d-flex justify-content-around align-items-center mb-3">
+        <span> 座標Y：</span>
+        <input class="form-control w-75" type='text' id='formY' value='N'/>
+    </div>
+    <div class="d-flex justify-content-around align-items-center mb-3">
+        <span>寬度：</span>
+        <input class="form-control w-75" type='text' id='formWidth' value='50'/>
+    </div>
+    <div class="d-flex justify-content-around align-items-center mb-3">
+        <span>高度：</span>
+        <input class="form-control w-75" type='text' id='formHeight' value='50'/>
+    </div>
+    <div class="d-flex justify-content-around align-items-center mb-3">
+        <span>路徑：</span>
+        <input class="form-control w-75" type='text' disabled='disabled' id='formPath' value='yellow.png'/>
+    </div>
 </form>
 <script>
-
     function setControl() {
         getByID('formName').value = chooseColor;
         getByID('formPath').value = chooseColor + '.png ';
     }
+
     function getByID(id) {
         return document.getElementById(id);
     }
+
     function blockEdit() {
         if (chooseColor != 'edit') return;
         AllObject[NowObj].name = getByID('formName').value;
@@ -115,7 +138,6 @@ console.log(str0+str1+str2+str3);
 </script>
 <!--<input type='button' value='重新開始' onclick='restart();'>-->
 <script>
-    //new editer asd741
     let NowObj = 0;
     let rulerPoint = 0;
     let chooseColor = '';
@@ -154,97 +176,96 @@ console.log(str0+str1+str2+str3);
         }
 
         //clearTimeout(timeoutCode);
-        alert('fail');
+        // alert('fail');
 
     }
     let tempDrawing = function () { };
+
     function pounch(x, y, w, h, x2, y2, w2, h2) {
         if (y + h >= y2 && x + w >= x2 && y < y2 + h2 && x < x2 + w2)
             return true;
         return false;
     }
-    let AllObject = [
-        {
-            name: 'Me',
-            pointX: 50,
-            pointY: 0,
-            width: 45,
-            height: 45,
-            upSet: 0,
-            upHeight: 120,
-            downSpeed: 0.5,
-            speed: 1,
-            path: [0, 0],
-            code: function () {
-                this.pointX += this.path[0];
-                this.pointY += this.path[1];
-                if (this.pointY > 600) {
-                    winfunction();
-                }
-                if (this.upSet > 1) {
-                    this.upSet -= 1;
-                    this.path[1] = -this.speed;
-                } else {
-                    this.path[1] = 0;
-                }
-            },
-            registerDraw: function () {
-                oCtx.beginPath();
-                oCtx.fillStyle = 'red';
-                oCtx.rect(this.pointX, this.pointY, this.width, this.height);
-                oCtx.fill();
-                oCtx.closePath();
-            },
-            pounch: function () {
-                let check = 0;
-                for (var i in AllObject) {
-                    if (i == 0) continue;
-                    if (pounch(this.pointX, this.pointY + this.downSpeed, this.width, this.height,
-                        AllObject[i].pointX, AllObject[i].pointY, AllObject[i].width, AllObject[i].height) == true) {
-                        check = 1;
-                    }
-                }
-                if (check == 0) {
-                    this.pointY += this.downSpeed;//alert(''); 
-                }
-                else if (check == 1) {
-                    this.upSet = 0;;//alert('1');
-                }
-            },
-            registerKeyDown: function (key) {
-                if ((key === 38 || key === 87) /*|| pounch0(Me.myX, Me.myY + 2, Me.myW, Me.myH) == true*/) { // up arrow and W 
-                    if (this.upSet < 1) {
-                        this.path[1] = -this.speed;
-                        this.upSet = this.upHeight;
-                    };
-                }
-                if (key === 39 || key === 68) { // right arrow and D 
-                    placeDirection[0] = -1;
-                    //TotalXMove -= 1;
-                }
-                if (key === 40 || key === 83) { // down arrow and S 
-                    //  this.path[1] = 1;
-                }
-                if (key === 37 || key === 65) { // left arrow and A 
-                    placeDirection[0] = 1;
-                    //TotalXMove += 1;
-                }
-            },
-            registerKeyUp: function (key) {
-                if ((key === 38 || key === 87) /*|| pounch0(Me.myX, Me.myY + 2, Me.myW, Me.myH) == true*/) { // up arrow and W 
-                    // this.path[1] = 0;
-                }
-                if (key === 39 || key === 68) { // right arrow and D 
-                    placeDirection[0] = 0;
-                }
-                if (key === 40 || key === 83) { // down arrow and S 
-                    //  this.path[1] = 0;
-                }
-                if (key === 37 || key === 65) { // left arrow and A 
-                    placeDirection[0] = 0;
-                }
+    let AllObject = [{
+        name: 'Me',
+        pointX: 50,
+        pointY: 0,
+        width: 45,
+        height: 45,
+        upSet: 0,
+        upHeight: 120,
+        downSpeed: 0.5,
+        speed: 1,
+        path: [0, 0],
+        code: function () {
+            this.pointX += this.path[0];
+            this.pointY += this.path[1];
+            if (this.pointY > 600) {
+                winfunction();
+            }
+            if (this.upSet > 1) {
+                this.upSet -= 1;
+                this.path[1] = -this.speed;
+            } else {
+                this.path[1] = 0;
             }
         },
+        registerDraw: function () {
+            oCtx.beginPath();
+            oCtx.fillStyle = 'red';
+            oCtx.rect(this.pointX, this.pointY, this.width, this.height);
+            oCtx.fill();
+            oCtx.closePath();
+        },
+        pounch: function () {
+            let check = 0;
+            for (var i in AllObject) {
+                if (i == 0) continue;
+                if (pounch(this.pointX, this.pointY + this.downSpeed, this.width, this.height,
+                    AllObject[i].pointX, AllObject[i].pointY, AllObject[i].width, AllObject[i].height) == true) {
+                    check = 1;
+                }
+            }
+            if (check == 0) {
+                this.pointY += this.downSpeed; //alert(''); 
+            } else if (check == 1) {
+                this.upSet = 0;; //alert('1');
+            }
+        },
+        registerKeyDown: function (key) {
+            if ((key === 38 || key === 87) /*|| pounch0(Me.myX, Me.myY + 2, Me.myW, Me.myH) == true*/) { // up arrow and W 
+                if (this.upSet < 1) {
+                    this.path[1] = -this.speed;
+                    this.upSet = this.upHeight;
+                };
+            }
+            if (key === 39 || key === 68) { // right arrow and D 
+                placeDirection[0] = -1;
+                //TotalXMove -= 1;
+            }
+            if (key === 40 || key === 83) { // down arrow and S 
+                //  this.path[1] = 1;
+            }
+            if (key === 37 || key === 65) { // left arrow and A 
+                placeDirection[0] = 1;
+                //TotalXMove += 1;
+            }
+        },
+        registerKeyUp: function (key) {
+            if ((key === 38 || key === 87) /*|| pounch0(Me.myX, Me.myY + 2, Me.myW, Me.myH) == true*/) { // up arrow and W 
+                // this.path[1] = 0;
+            }
+            if (key === 39 || key === 68) { // right arrow and D 
+                placeDirection[0] = 0;
+            }
+            if (key === 40 || key === 83) { // down arrow and S 
+                //  this.path[1] = 0;
+            }
+            if (key === 37 || key === 65) { // left arrow and A 
+                placeDirection[0] = 0;
+            }
+        }
+    },
         /* {
              name: 'yellowblock',
              pointX: 150,
@@ -264,6 +285,7 @@ console.log(str0+str1+str2+str3);
              }
          }*/
     ]
+
     function KeyDown(e) {
         var keyID = e.keyCode ? e.keyCode : e.which;
         for (var i in AllObject) {
@@ -272,6 +294,7 @@ console.log(str0+str1+str2+str3);
             }
         }
     }
+
     function KeyUp(e) {
         var keyID = e.keyCode ? e.keyCode : e.which;
         for (var i in AllObject) {
@@ -291,15 +314,15 @@ console.log(str0+str1+str2+str3);
                 AllObject[i].pounch();
             }
         }
-       /* let check=0;
-        for (var i in AllObject) {
-            if (i == 0) continue;
-            if (pounch(AllObject[0].pointX - placeDirection[0], AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-                AllObject[i].pointX, AllObject[i].pointY, AllObject[i].width, AllObject[i].height) == true) {
-                check = 1;
-            }
-        }
-        if (check == 0) TotalXMove += placeDirection[0];*/
+        /* let check=0;
+         for (var i in AllObject) {
+             if (i == 0) continue;
+             if (pounch(AllObject[0].pointX - placeDirection[0], AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
+                 AllObject[i].pointX, AllObject[i].pointY, AllObject[i].width, AllObject[i].height) == true) {
+                 check = 1;
+             }
+         }
+         if (check == 0) TotalXMove += placeDirection[0];*/
     });
     var timeoutDraw = window.setInterval(function () {
         oCtx.clearRect(0, 0, oCanvas.width, oCanvas.height);
@@ -332,31 +355,35 @@ console.log(str0+str1+str2+str3);
             }
         }
     }
+
     function MouseMove(e) {
         downCheck = false;
         chooseX = e.clientX;
         chooseY = e.clientY;
         var check = 0;
         if (chooseColor == 'yellow') {
-            tempDrawing = function () { oCtx.drawImage(yelloImg, e.clientX - 25, e.clientY - 25, 45, 45); }
-        }
-        else if (chooseColor == 'red2') {
-            tempDrawing = function () { oCtx.drawImage(redImg2, e.clientX - 25, e.clientY - 25, 45, 45); }
-        }
-        else if (chooseColor == 'blue') {
-            tempDrawing = function () { oCtx.drawImage(blueImg, e.clientX - 25, e.clientY - 25, 45, 45); }
-        }
-        else if (chooseColor == 'green') {
-            tempDrawing = function () { oCtx.drawImage(greenImg, e.clientX - 25, e.clientY - 25, 45, 45); }
-        }
-        else {
+            tempDrawing = function () {
+                oCtx.drawImage(yelloImg, e.clientX - 25, e.clientY - 25, 45, 45);
+            }
+        } else if (chooseColor == 'red2') {
+            tempDrawing = function () {
+                oCtx.drawImage(redImg2, e.clientX - 25, e.clientY - 25, 45, 45);
+            }
+        } else if (chooseColor == 'blue') {
+            tempDrawing = function () {
+                oCtx.drawImage(blueImg, e.clientX - 25, e.clientY - 25, 45, 45);
+            }
+        } else if (chooseColor == 'green') {
+            tempDrawing = function () {
+                oCtx.drawImage(greenImg, e.clientX - 25, e.clientY - 25, 45, 45);
+            }
+        } else {
             check = 1;
         }
         if (check == 0) {
             getByID('formX').value = '' + chooseX;
             getByID('formY').value = '' + chooseY;
-        }
-        else if (chooseColor == 'move' && AllObject[NowObj]) {
+        } else if (chooseColor == 'move' && AllObject[NowObj]) {
             getByID('formX').value = '' + chooseX;
             getByID('formY').value = '' + chooseY;
             AllObject[NowObj].name = getByID('formName').value;
@@ -366,6 +393,7 @@ console.log(str0+str1+str2+str3);
             AllObject[NowObj].height = parseInt(getByID('formHeight').value);
         }
     }
+
     function MouseUp(e) {
         tempDrawing = function () { };
         chooseX = e.clientX;
@@ -443,8 +471,7 @@ console.log(str0+str1+str2+str3);
                 }
             }
             AllObject.push(obj);
-        }
-        else if (chooseColor == 'move' && AllObject[NowObj]) {
+        } else if (chooseColor == 'move' && AllObject[NowObj]) {
             AllObject[NowObj].name = getByID('formName').value;
             AllObject[NowObj].pointX = chooseX - 25;
             AllObject[NowObj].pointY = chooseY - 25;
@@ -456,6 +483,7 @@ console.log(str0+str1+str2+str3);
         //alert(parseInt(getByID('formHeight').value));
         chooseColor = '';
     }
+
     function pounch0(x, y, w, h) {
         for (var i in blocks.yellow.pointX) {
             var block0 = blocks.yellow;
@@ -474,7 +502,7 @@ console.log(str0+str1+str2+str3);
             var block0 = blocks.red2;
             if (pounch(x, y, w, h, block0.pointX[i], block0.pointY[i], TW, TH) == true) {
                 win = true;
-                alert('fail');
+                // alert('fail');
                 restart();
                 return true;
             }
