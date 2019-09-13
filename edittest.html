@@ -1,5 +1,6 @@
 ﻿<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
     integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
 <body style="padding-bottom:150px;">
     <span style='font-size: large;'></span>
     <canvas height='550' id='game' width='750'></canvas>
@@ -7,9 +8,119 @@
     <img src='green.png' alt='green' onclick="chooseColor='green';setControl();" onchange='blockEdit();'>
     <img src='red2.png' alt='red2' onclick="chooseColor='red2';setControl();" onchange='blockEdit();'>
     <img src='blue.png' alt='blue' onclick="chooseColor='blue';setControl();" onchange='blockEdit();'>
-    <button onclick="clone()" class="btn btn-secondary">輸出</button>
+    <!-- <button onclick="clone();asdHappyCopy()" class="btn btn-secondary">輸出</button> -->
+    <button onclick="/*asdHappyCopy()*/;download(String(asdHappyCopy()), 'myfilename.html', 'text/plain');"
+        class="btn btn-secondary">輸出</button>
+    <a href="" id="a" style="display: none;">click here to download your file</a>
 </body>
 <script>
+    function asdHappyCopy() {
+        function superToString(objArr) {
+            let theStr = 'let AllObject=[';
+            objArr.forEach(obj => {
+                theStr += "{";
+                for (const key in obj) {
+                    if (key == "name") theStr += key + ":" + "'" + obj[key] + "',";
+                    else if (key == "path") theStr += key + ":" + "[" + obj[key] + "],";
+                    else if (key == "Image") { theStr += key + ":" + "" + obj[key].alt + ","; }
+                    else theStr += key + ":" + obj[key] + ",";//;`"${key}":${obj[key]},`;
+                }
+                theStr += "},";
+            })
+            theStr = "" + theStr + "]";
+            return theStr;
+        }
+        const yo = `<span style='font-size: large;'></span>
+<canvas height='550' id='game' width='750'></canvas>
+        <script>let NowObj = 0;
+    let rulerPoint = 0;
+    let chooseColor = '';
+    let chooseX = 0;
+    let chooseY = 0;
+    let downCheck = false;
+    let TotalXMove = 0;
+    let placeDirection = [0, 0];
+    let oCanvas = document.getElementById('game'),
+        oCtx = oCanvas.getContext('2d');
+    let tempImg = new Image();
+    let yelloImg = new Image();
+    yelloImg.src = 'yellow.png';
+    let blueImg = new Image();
+    blueImg.src = 'blue.png';
+    let redImg2 = new Image();
+    redImg2.src = 'red2.png';
+    let greenImg = new Image();
+    greenImg.src = 'green.png';
+    window.addEventListener('keydown', KeyDown, true);
+    window.addEventListener('keyup', KeyUp, true);
+    function failfunction() {
+        AllObject[0].pointY = 0;
+        placeDirection[0] = 0;
+        placeDirection[1] = 0;
+        for (var i in AllObject) {
+            if (i == 0) continue;
+            AllObject[i].pointX -= TotalXMove;
+        }
+        alert('fail');
+    }
+    function winfunction() {
+        /*AllObject[0].pointY = 0;
+        placeDirection[0] = 0;
+        placeDirection[1] = 0;
+        for (var i in AllObject) {
+            if (i == 0) continue;
+            AllObject[i].pointX -= TotalXMove;
+        }*/
+        clearInterval(timeoutCode);
+        alert('win');
+    }
+    let tempDrawing = function () { };
+    function pounch(x, y, w, h, x2, y2, w2, h2) {
+        if (y + h >= y2 && x + w >= x2 && y < y2 + h2 && x < x2 + w2)
+            return true;
+        return false;
+    };
+    ${superToString(AllObject)};
+    function KeyDown(e) {                                   
+        var keyID = e.keyCode ? e.keyCode : e.which;               
+        for (var i in AllObject) {                                 
+            if (AllObject[i].registerKeyDown) {                    
+                AllObject[i].registerKeyDown(keyID);               
+            }                                                      
+        }                                                          
+    }                                                              
+    function KeyUp(e) {                                            
+        var keyID = e.keyCode ? e.keyCode : e.which;               
+        for (var i in AllObject) {                                 
+            if (AllObject[i].registerKeyUp) {                      
+                AllObject[i].registerKeyUp(keyID);                 
+            }                                                      
+        }                                                          
+    }                                                              
+    var timeoutCode = window.setInterval(function () {             
+        for (var i in AllObject) {                                 
+            if (AllObject[i].code) {                               
+                AllObject[i].code();                               
+            }                                                      
+        }                                                          
+        for (var i in AllObject) {                                 
+            if (AllObject[i].pounch) {                             
+                AllObject[i].pounch();                             
+            }                                                      
+        }                                                          
+                                                                   
+    });                                                            
+    var timeoutDraw = window.setInterval(function () {             
+        oCtx.clearRect(0, 0, oCanvas.width, oCanvas.height);       
+        for (var i in AllObject) {                                 
+            if (AllObject[i].registerDraw) {                       
+                AllObject[i].registerDraw();                       
+            }                                                      
+        }                                                          
+        tempDrawing(); }) <\/script>`;
+        //console.log(yo, 'yooooo')
+        return yo;
+    }
     function clone() {
         var str0 = "<span style='font-size: large;'></span>\
 <canvas height='550' id='game' width='750'></canvas>";
@@ -87,37 +198,45 @@
                 AllObject[i].registerDraw();                       \
             }                                                      \
         }                                                          \
-        tempDrawing(); }) <"+"/"+"script>";
+        tempDrawing(); }) <"+ "/" + "script>";
         console.log(str0 + str1 + str2 + str3);
+        return "" + str0 + str1 + str2 + str3;
     }
 </script>
 <form class="ml-5 w-25" style="min-width:456px;">
     <div class="d-flex justify-content-around align-items-center mb-3">
         <span>名稱：</span>
-        <input class="form-control w-75" type='text' id='formName' value='yellow'/>
+        <input class="form-control w-75" type='text' id='formName' value='yellow' />
     </div>
     <div class="d-flex justify-content-around align-items-center mb-3">
         <span> 座標X：</span>
-        <input class="form-control w-75" type='text' id='formX' value='N'/>
+        <input class="form-control w-75" type='text' id='formX' value='N' />
     </div>
     <div class="d-flex justify-content-around align-items-center mb-3">
         <span> 座標Y：</span>
-        <input class="form-control w-75" type='text' id='formY' value='N'/>
+        <input class="form-control w-75" type='text' id='formY' value='N' />
     </div>
     <div class="d-flex justify-content-around align-items-center mb-3">
         <span>寬度：</span>
-        <input class="form-control w-75" type='text' id='formWidth' value='50'/>
+        <input class="form-control w-75" type='text' id='formWidth' value='50' />
     </div>
     <div class="d-flex justify-content-around align-items-center mb-3">
         <span>高度：</span>
-        <input class="form-control w-75" type='text' id='formHeight' value='50'/>
+        <input class="form-control w-75" type='text' id='formHeight' value='50' />
     </div>
     <div class="d-flex justify-content-around align-items-center mb-3">
         <span>路徑：</span>
-        <input class="form-control w-75" type='text' disabled='disabled' id='formPath' value='yellow.png'/>
+        <input class="form-control w-75" type='text' disabled='disabled' id='formPath' value='yellow.png' />
     </div>
 </form>
 <script>
+    function download(text, name, type) {
+        var a = document.getElementById("a");
+        var file = new Blob([text], { type: type });
+        a.href = URL.createObjectURL(file);
+        a.style.display = "";
+        a.download = name;
+    }
     function setControl() {
         getByID('formName').value = chooseColor;
         getByID('formPath').value = chooseColor + '.png ';
@@ -152,32 +271,44 @@
     let tempImg = new Image();
     let yelloImg = new Image();
     yelloImg.src = 'yellow.png';
+    yelloImg.alt = 'yelloImg';
     let blueImg = new Image();
     blueImg.src = 'blue.png';
+    blueImg.alt = 'blueImg';
     let redImg2 = new Image();
     redImg2.src = 'red2.png';
+    redImg2.alt = 'redImg2';
     let greenImg = new Image();
     greenImg.src = 'green.png';
+    greenImg.alt = 'greenImg';
 
     window.addEventListener('keydown', KeyDown, true);
     window.addEventListener('keyup', KeyUp, true);
     oCanvas.addEventListener('mousedown', MouseDown, true);
     oCanvas.addEventListener('mousemove', MouseMove, true);
     oCanvas.addEventListener('mouseup', MouseUp, true);
-
-
-    function winfunction() {
+    function failfunction() {
+        /* AllObject[0].pointY = 0;
+         placeDirection[0] = 0;
+         placeDirection[1] = 0;
+         for (var i in AllObject) {
+             if (i == 0) continue;
+             AllObject[i].pointX -= TotalXMove;
+         }*/
         AllObject[0].pointY = 0;
         placeDirection[0] = 0;
         placeDirection[1] = 0;
-        for (var i in AllObject) {
-            if (i == 0) continue;
-            AllObject[i].pointX -= TotalXMove;
-        }
+    }
 
-        //clearTimeout(timeoutCode);
-        // alert('fail');
-
+    function winfunction() {
+        /* AllObject[0].pointY = 0;
+         placeDirection[0] = 0;
+         placeDirection[1] = 0;
+         for (var i in AllObject) {
+             if (i == 0) continue;
+             AllObject[i].pointX -= TotalXMove;
+         }*/
+        // alert("");
     }
     let tempDrawing = function () { };
 
@@ -201,7 +332,7 @@
             this.pointX += this.path[0];
             this.pointY += this.path[1];
             if (this.pointY > 600) {
-                winfunction();
+                failfunction();
             }
             if (this.upSet > 1) {
                 this.upSet -= 1;
@@ -444,20 +575,20 @@
                     this.pointY += placeDirection[1];
                 },
                 pounch: function () {
-                    if (tempColor == redImg2) {
+                    if (this.Image == redImg2) {
                         if (pounch(AllObject[0].pointX - placeDirection[0], AllObject[0].pointY + AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
                             this.pointX, this.pointY, this.width, this.height) == true) {
-                            winfunction();
+                            failfunction();
 
                         }
                     }
-                    if (tempColor == blueImg) {
+                    if (this.Image == blueImg) {
                         if (pounch(AllObject[0].pointX, AllObject[0].pointY + AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
                             this.pointX, this.pointY, this.width, this.height) == true) {
                             this.pointY += 1;
                         }
                     }
-                    if (tempColor == greenImg) {
+                    if (this.Image == greenImg) {
                         if (pounch(AllObject[0].pointX - placeDirection[0], AllObject[0].pointY + AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
                             this.pointX, this.pointY, this.width, this.height) == true) {
                             winfunction();
