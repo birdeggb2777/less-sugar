@@ -50,7 +50,7 @@
             return true;\
         return false;\
     }"
-        let str2 = "" + (JSON.stringify(AllObject));
+        let str2 = "let AllObject =" + (JSON.stringify(AllObject));
         let str3 = ";function KeyDown(e) {                                   \
         var keyID = e.keyCode ? e.keyCode : e.which;               \
         for (var i in AllObject) {                                 \
@@ -87,7 +87,7 @@
                 AllObject[i].registerDraw();                       \
             }                                                      \
         }                                                          \
-        tempDrawing(); }) <\/script>";
+        tempDrawing(); }) <"+"/"+"script>";
         console.log(str0 + str1 + str2 + str3);
     }
 </script>
