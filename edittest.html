@@ -4,10 +4,11 @@
 <body style="padding-bottom:150px;">
     <span style='font-size: large;'></span>
     <canvas height='550' id='game' width='750'></canvas>
-    <img src='yellow.png' alt='yellow' onclick="chooseColor='yellow';setControl();" onchange='blockEdit();'>
-    <img src='green.png' alt='green' onclick="chooseColor='green';setControl();" onchange='blockEdit();'>
-    <img src='red2.png' alt='red2' onclick="chooseColor='red2';setControl();" onchange='blockEdit();'>
-    <img src='blue.png' alt='blue' onclick="chooseColor='blue';setControl();" onchange='blockEdit();'>
+    <label>座標修正　</label><input type="checkbox" checked='true' id="AutoPoint" style="transform : scale(2); ">
+    <img src='yellow.png' alt='yellow' onclick="chooseColor='yellow';NowObj=-1;setControl();" onchange='blockEdit();'>
+    <img src='green.png' alt='green' onclick="chooseColor='green';NowObj=-1;setControl();" onchange='blockEdit();'>
+    <img src='red2.png' alt='red2' onclick="chooseColor='red2';NowObj=-1;setControl();" onchange='blockEdit();'>
+    <img src='blue.png' alt='blue' onclick="chooseColor='blue';NowObj=-1;setControl();" onchange='blockEdit();'>
     <!-- <button onclick="clone();asdHappyCopy()" class="btn btn-secondary">輸出</button> -->
     <button onclick="/*asdHappyCopy()*/;download(String(asdHappyCopy()), 'myfilename.html', 'text/plain');"
         class="btn btn-secondary">輸出</button>
@@ -319,7 +320,7 @@
     }
     let AllObject = [{
         name: 'Me',
-        pointX: 50,
+        pointX: 250,
         pointY: 0,
         width: 45,
         height: 45,
@@ -353,6 +354,10 @@
             for (var i in AllObject) {
                 if (i == 0) continue;
                 if (pounch(this.pointX, this.pointY + this.downSpeed, this.width, this.height,
+                    AllObject[i].pointX, AllObject[i].pointY, AllObject[i].width, AllObject[i].height) == true) {
+                    check = 1;
+                }
+                if (this.upSet > 0 && pounch(this.pointX, this.pointY - this.speed, this.width, this.height,
                     AllObject[i].pointX, AllObject[i].pointY, AllObject[i].width, AllObject[i].height) == true) {
                     check = 1;
                 }
@@ -468,6 +473,7 @@
     function MouseDown(e) {
         chooseX = e.clientX;
         chooseY = e.clientY;
+        chooseY=AutoEditPointY(chooseX,chooseY);
         downCheck = true;
         if (chooseColor == '') {
             for (var i in AllObject) {
@@ -485,28 +491,31 @@
                 }
             }
         }
+
     }
 
     function MouseMove(e) {
         downCheck = false;
         chooseX = e.clientX;
         chooseY = e.clientY;
+        chooseY=AutoEditPointY(chooseX,chooseY);
         var check = 0;
+        //  console.log(chooseColor);
         if (chooseColor == 'yellow') {
             tempDrawing = function () {
-                oCtx.drawImage(yelloImg, e.clientX - 25, e.clientY - 25, 45, 45);
+                oCtx.drawImage(yelloImg, chooseX - 25, chooseY - 25, 45, 45);
             }
         } else if (chooseColor == 'red2') {
             tempDrawing = function () {
-                oCtx.drawImage(redImg2, e.clientX - 25, e.clientY - 25, 45, 45);
+                oCtx.drawImage(redImg2, chooseX - 25, chooseY - 25, 45, 45);
             }
         } else if (chooseColor == 'blue') {
             tempDrawing = function () {
-                oCtx.drawImage(blueImg, e.clientX - 25, e.clientY - 25, 45, 45);
+                oCtx.drawImage(blueImg, chooseX - 25, chooseY - 25, 45, 45);
             }
         } else if (chooseColor == 'green') {
             tempDrawing = function () {
-                oCtx.drawImage(greenImg, e.clientX - 25, e.clientY - 25, 45, 45);
+                oCtx.drawImage(greenImg, chooseX - 25, chooseY - 25, 45, 45);
             }
         } else {
             check = 1;
@@ -536,6 +545,7 @@
         else if (chooseColor == 'blue') tempColor = blueImg;
         else if (chooseColor == 'green') tempColor = greenImg;
         else check = 1;
+        chooseY=AutoEditPointY(chooseX,chooseY);
         /* if (downCheck == true) {
              for (var i in AllObject) {
                  if (AllObject[i].pointX && AllObject[i].pointY && AllObject[i].width && AllObject[i].height) {
@@ -576,7 +586,7 @@
                 },
                 pounch: function () {
                     if (this.Image == redImg2) {
-                        if (pounch(AllObject[0].pointX - placeDirection[0], AllObject[0].pointY + AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
+                        if (pounch(AllObject[0].pointX /*- placeDirection[0]*/, AllObject[0].pointY + AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
                             this.pointX, this.pointY, this.width, this.height) == true) {
                             failfunction();
 
@@ -602,7 +612,9 @@
                 }
             }
             AllObject.push(obj);
-        } else if (chooseColor == 'move' && AllObject[NowObj]) {
+            chooseColor == 'move';
+        }
+        else if (chooseColor == 'move' && AllObject[NowObj]) {
             AllObject[NowObj].name = getByID('formName').value;
             AllObject[NowObj].pointX = chooseX - 25;
             AllObject[NowObj].pointY = chooseY - 25;
@@ -647,5 +659,30 @@
             }
         }
         return false;
+    }
+    function AutoEditPointY(chooseX,chooseY){
+        if (getByID('AutoPoint').checked == true) {
+            for (var i in AllObject) {
+                //console.log(i);
+                if (NowObj == 0) continue;
+                if (i == 0) continue;
+                if (i == NowObj) continue;
+                if (AllObject[i].pointX && AllObject[i].pointY && AllObject[i].width && AllObject[i].height) {
+                    if (pounch(chooseX - parseInt(getByID('formWidth').value), chooseY, parseInt(getByID('formWidth').value), 10,
+                        AllObject[i].pointX, AllObject[i].pointY, AllObject[i].width + 25 / 2, AllObject[i].height + 25 / 2) == true) {
+                        chooseY = AllObject[i].pointY + 25;
+                        break;
+                    }
+                }
+                if (AllObject[i].pointX && AllObject[i].pointY && AllObject[i].width && AllObject[i].height) {
+                    if (pounch(chooseX + parseInt(getByID('formWidth').value), chooseY, parseInt(getByID('formWidth').value), 10,
+                        AllObject[i].pointX, AllObject[i].pointY, AllObject[i].width + 25 / 2, AllObject[i].height + 25 / 2) == true) {
+                        chooseY = AllObject[i].pointY + 25;
+                        break;
+                    }
+                }
+            }
+        }
+        return chooseY;
     }
 </script>
