@@ -12,7 +12,12 @@ const oPlayer = new Player({
         move: { right: false, left: false, up: false, down: false, autoDown: 0.5 }
     }
 });
-
+/**
+ * 
+ * @param {String} direction 
+ * @param {Number} speed 
+ * @example //not use function handlePlayerMove yet
+ */
 function handlePlayerMove({ direction, speed }) {
     let { move } = oPlayer.action;
     if (!speed) { //沒有速度時，該方向由移動轉靜止
