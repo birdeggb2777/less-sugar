@@ -12,6 +12,7 @@ const oPlayer = new Player({
         move: { right: false, left: false, up: false, down: false, autoDown: 0.5 }
     }
 });
+// 2019/09.16
 /**
  * 
  * @param {String} direction 
