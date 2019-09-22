@@ -9,7 +9,8 @@
     <img src='green.png' alt='green' onclick="chooseColor='green';NowObj=-1;setControl();" onchange='blockEdit();'>
     <img src='red2.png' alt='red2' onclick="chooseColor='red2';NowObj=-1;setControl();" onchange='blockEdit();'>
     <img src='blue.png' alt='blue' onclick="chooseColor='blue';NowObj=-1;setControl();" onchange='blockEdit();'>
-    <img src='magnet1.png' alt='magnet1' width='50' height='50' onclick="chooseColor='magnet1';NowObj=-1;setControl();"
+    <img src='magnet1.png' alt='magnet1' width='50' height='50' onclick="chooseColor='magnet1';NowObj=-1;setControl();">
+    <img src='magnet2.png' alt='magnet2' width='50' height='50' onclick="chooseColor='magnet2';NowObj=-1;setControl();">
         onchange='blockEdit();'>
     <!-- <button onclick="clone();asdHappyCopy()" class="btn btn-secondary">輸出</button> -->
     <button onclick="/*asdHappyCopy()*/;download(String(asdHappyCopy()), 'myfilename.html', 'text/plain');"
@@ -56,6 +57,8 @@
     greenImg.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/green.png';
     let magnet1Img = new Image();
     magnet1Img.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/magnet1.png';
+    let magnet2Img = new Image();
+    magnet2Img.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/magnet2.png';
     window.addEventListener('keydown', KeyDown, true);
     window.addEventListener('keyup', KeyUp, true);
     function failfunction() {
@@ -165,9 +168,13 @@
     function setControl() {
         getByID('formName').value = chooseColor;
         getByID('formPath').value = chooseColor + '.png ';
-        if (chooseColor == 'magnet1') {
+        if (chooseColor == 'magnet1'||chooseColor == 'magnet2') {
             getByID('formWidth').value = '90';
             getByID('formHeight').value = '90';
+        }
+        else{
+            getByID('formWidth').value = '45';
+            getByID('formHeight').value = '45';
         }
     }
 
@@ -204,6 +211,9 @@
     let magnet1Img = new Image();
     magnet1Img.src = 'magnet1.png';
     magnet1Img.alt = 'magnet1Img';
+    let magnet2Img = new Image();
+    magnet2Img.src = 'magnet2.png';
+    magnet2Img.alt = 'magnet2Img';
     let redImg2 = new Image();
     redImg2.src = 'red2.png';
     redImg2.alt = 'redImg2';
@@ -454,6 +464,11 @@
                 oCtx.drawImage(magnet1Img, chooseX - 25, chooseY - 25, 45 * 2, 45 * 2);
             }
         }
+        else if (chooseColor == 'magnet2') {
+            tempDrawing = function () {
+                oCtx.drawImage(magnet2Img, chooseX - 25, chooseY - 25, 45 * 2, 45 * 2);
+            }
+        }
         else {
             check = 1;
         }
@@ -482,6 +497,7 @@
         else if (chooseColor == 'blue') tempColor = blueImg;
         else if (chooseColor == 'green') tempColor = greenImg;
         else if (chooseColor == 'magnet1') tempColor = magnet1Img;
+        else if (chooseColor == 'magnet2') tempColor = magnet2Img;
         else check = 1;
         chooseY = AutoEditPointY(chooseX, chooseY);
         /* if (downCheck == true) {
@@ -546,6 +562,18 @@
                         if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
                             this.pointX, this.pointY + this.height, this.width, this.height * 2) == true) {
                             AllObject[0].pointY -= 1;
+                        }
+                    }
+                    if (this.Image == magnet2Img) {
+                        if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
+                            this.pointX, this.pointY, this.width, this.height) == true) {
+                            failfunction();
+                        }
+                    }
+                    if (this.Image == magnet2Img) {
+                        if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
+                            this.pointX - this.width, this.pointY, this.width*2, this.height) == true) {
+                            AllObject[0].pointX += 1;
                         }
                     }
                     if (this.Image == greenImg) {
