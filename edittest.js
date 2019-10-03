@@ -78,14 +78,15 @@ async function failfunction() {
 }
 
 function playerFailAnimate(){
+  failAnimateSound.play();
   let left=AllObject[0].pointX,
       right=AllObject[0].pointX,
       top=AllObject[0].pointY,
       bottom=AllObject[0].pointY;
   function frame(){
     return new Promise(resolve => {
-      AllObject[0].width-=0.01;
-      AllObject[0].height-=0.01;
+      AllObject[0].width-=0.02;
+      AllObject[0].height-=0.02;
       function drawLeftTopFragment(){
         left-=1;
         top-=1;

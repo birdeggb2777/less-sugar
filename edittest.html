@@ -1,4 +1,16 @@
-﻿<link
+﻿<style>
+#bg{
+  background: url('https://img.ivsky.com/img/bizhi/pre/201204/30/puella_magi_madoka_magica-034.jpg') no-repeat fixed right;
+  width: 100vw;
+  height: 100vh;
+  right: 0;
+  background-size: cover;
+  position: fixed;
+  z-index: -1;
+  opacity: 0.5;
+}
+</style>
+<link
   rel="stylesheet"
   href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
   integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
@@ -6,6 +18,9 @@
 />
 
 <body style="padding-bottom:150px;">
+  <div id='bg'></div>
+  <audio src="./failAnimate.mp3" id="failAnimateSound"></audio>
+  <audio src="./bgm.wav" autoplay></audio>
   <span style="font-size: large;"></span>
   <canvas height="550" id="game" width="750"></canvas>
   <label>座標修正 </label
