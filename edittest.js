@@ -59,7 +59,7 @@ window.addEventListener("keyup", KeyUp, true);
 oCanvas.addEventListener("mousedown", MouseDown, true);
 oCanvas.addEventListener("mousemove", MouseMove, true);
 oCanvas.addEventListener("mouseup", MouseUp, true);
-function failfunction() {
+async function failfunction() {
   //遊戲失敗結束的時候觸發
   /* AllObject[0].pointY = 0;
          placeDirection[0] = 0;
@@ -68,11 +68,62 @@ function failfunction() {
              if (i == 0) continue;
              AllObject[i].pointX -= TotalXMove;
          }*/
+  await playerFailAnimate();
+  AllObject[0].width= 45;
+  AllObject[0].height= 45;
   AllObject[0].pointY = 0;
   placeDirection[0] = 0;
   placeDirection[1] = 0;
+  AllObject[0].registerDraw();
 }
 
+function playerFailAnimate(){
+  let left=AllObject[0].pointX,
+      right=AllObject[0].pointX,
+      top=AllObject[0].pointY,
+      bottom=AllObject[0].pointY;
+  function frame(){
+    return new Promise(resolve => {
+      AllObject[0].width-=0.01;
+      AllObject[0].height-=0.01;
+      function drawLeftTopFragment(){
+        left-=1;
+        top-=1;
+        AllObject[0].pointX=left;
+        AllObject[0].pointY=top;
+        AllObject[0].registerDraw();
+      }
+      function drawRightTopFragment(){
+        right+=1;
+        AllObject[0].pointX=right;
+        AllObject[0].pointY=top;
+        AllObject[0].registerDraw();
+      }
+      function drawLeftBottomFragment(){
+        bottom+=1;
+        AllObject[0].pointX=left;
+        AllObject[0].pointY=bottom;
+        AllObject[0].registerDraw();
+      }
+      function drawRightBottomFragment(){
+        AllObject[0].pointX=right;
+        AllObject[0].pointY=bottom;
+        AllObject[0].registerDraw();
+      }
+      drawLeftTopFragment();
+      drawRightTopFragment();
+      drawLeftBottomFragment();
+      drawRightBottomFragment();
+      if(AllObject[0].width<=0&&AllObject[0].height<=0){
+        cancelAnimationFrame(frame);
+        resolve();
+        return;
+      }
+      requestAnimationFrame(frame);
+    });
+  }
+  return frame();
+}
 function winfunction() {
   //遊戲成功結束的時候觸發
   /* AllObject[0].pointY = 0;
@@ -119,7 +170,7 @@ let AllObject = [
         this.path[1] = 0;
       }
     },
-    registerDraw: function() {
+    registerDraw: async function() {
       oCtx.beginPath();
       oCtx.fillStyle = "red";
       oCtx.rect(this.pointX, this.pointY, this.width, this.height);
