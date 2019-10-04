@@ -69,6 +69,7 @@ async function failfunction() {
              AllObject[i].pointX -= TotalXMove;
          }*/
   await playerFailAnimate();
+  console.log('動畫結束')
   AllObject[0].width= 45;
   AllObject[0].height= 45;
   AllObject[0].pointY = 0;
