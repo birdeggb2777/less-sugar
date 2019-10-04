@@ -117,7 +117,6 @@ function playerFailAnimate(){
       drawRightTopFragment();
       drawLeftBottomFragment();
       drawRightBottomFragment();
-      // console.log(AllObject[0].width,AllObject[0].height,'????');
       if(AllObject[0].width<=0&&AllObject[0].height<=0){
         cancelAnimationFrame(animate);
         resolve();
@@ -392,10 +391,9 @@ function chooseBlock() {
 function MouseMove(e) {
   downCheck = false;
   chooseX = e.clientX;
-  chooseY = e.clientY;
+  chooseY = e.offsetY;
   chooseY = AutoEditPointY(chooseX, chooseY);
   var check = 0;
-  //  console.log(chooseColor);
   if (chooseColor == "yellow") {
     tempDrawing = function() {
       oCtx.drawImage(yelloImg, chooseX - 25, chooseY - 25, 45, 45);
