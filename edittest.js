@@ -53,13 +53,14 @@ redImg2.alt = "redImg2";
 let greenImg = new Image();
 greenImg.src = "green.png";
 greenImg.alt = "greenImg";
-
+let isFailFunctionRunning=false;
 window.addEventListener("keydown", KeyDown, true);
 window.addEventListener("keyup", KeyUp, true);
 oCanvas.addEventListener("mousedown", MouseDown, true);
 oCanvas.addEventListener("mousemove", MouseMove, true);
 oCanvas.addEventListener("mouseup", MouseUp, true);
 async function failfunction() {
+  isFailFunctionRunning=true;
   //遊戲失敗結束的時候觸發
   /* AllObject[0].pointY = 0;
          placeDirection[0] = 0;
@@ -69,25 +70,25 @@ async function failfunction() {
              AllObject[i].pointX -= TotalXMove;
          }*/
   await playerFailAnimate();
-  console.log('動畫結束')
   AllObject[0].width= 45;
   AllObject[0].height= 45;
   AllObject[0].pointY = 0;
   placeDirection[0] = 0;
   placeDirection[1] = 0;
   AllObject[0].registerDraw();
+  isFailFunctionRunning=false;
 }
 
 function playerFailAnimate(){
-  failAnimateSound.play();
-  let left=AllObject[0].pointX,
-      right=AllObject[0].pointX,
-      top=AllObject[0].pointY,
-      bottom=AllObject[0].pointY;
-  function frame(){
-    return new Promise(resolve => {
-      AllObject[0].width-=0.02;
-      AllObject[0].height-=0.02;
+  return new Promise(resolve => {
+    failAnimateSound.play();
+    let left=AllObject[0].pointX,
+        right=AllObject[0].pointX,
+        top=AllObject[0].pointY,
+        bottom=AllObject[0].pointY;
+    function animate(){
+      AllObject[0].width-=2;
+      AllObject[0].height-=2;
       function drawLeftTopFragment(){
         left-=1;
         top-=1;
@@ -116,15 +117,16 @@ function playerFailAnimate(){
       drawRightTopFragment();
       drawLeftBottomFragment();
       drawRightBottomFragment();
+      // console.log(AllObject[0].width,AllObject[0].height,'????');
       if(AllObject[0].width<=0&&AllObject[0].height<=0){
-        cancelAnimationFrame(frame);
+        cancelAnimationFrame(animate);
         resolve();
         return;
       }
-      requestAnimationFrame(frame);
+      requestAnimationFrame(animate);
+    }
+    animate();
     });
-  }
-  return frame();
 }
 function winfunction() {
   //遊戲成功結束的時候觸發
@@ -163,7 +165,7 @@ let AllObject = [
       this.pointX += this.path[0];
       this.pointY += this.path[1];
       if (this.pointY > 600) {
-        failfunction();
+        !isFailFunctionRunning&&failfunction();
       }
       if (this.upSet > 1) {
         this.upSet -= 1;
@@ -501,7 +503,7 @@ function MouseUp(e) {
               this.height
             ) == true
           ) {
-            failfunction();
+            !isFailFunctionRunning&&failfunction();
           }
         }
         if (this.Image == blueImg) {
