@@ -59,23 +59,29 @@ window.addEventListener("keyup", KeyUp, true);
 oCanvas.addEventListener("mousedown", MouseDown, true);
 oCanvas.addEventListener("mousemove", MouseMove, true);
 oCanvas.addEventListener("mouseup", MouseUp, true);
-async function failfunction() {
-  isFailFunctionRunning=true;
-  //遊戲失敗結束的時候觸發
+function resetPlayer(){
   /* AllObject[0].pointY = 0;
-         placeDirection[0] = 0;
-         placeDirection[1] = 0;
-         for (var i in AllObject) {
-             if (i == 0) continue;
-             AllObject[i].pointX -= TotalXMove;
-         }*/
-  await playerFailAnimate();
+  placeDirection[0] = 0;
+  placeDirection[1] = 0;
+  for (var i in AllObject) {
+      if (i == 0) continue;
+      AllObject[i].pointX -= TotalXMove;
+  }*/
   AllObject[0].width= 45;
   AllObject[0].height= 45;
   AllObject[0].pointY = 0;
   placeDirection[0] = 0;
   placeDirection[1] = 0;
   AllObject[0].registerDraw();
+}
+async function failfunction() {
+  //遊戲失敗結束的時候觸發
+  if(isFailFunctionRunning){
+    return;
+  }
+  isFailFunctionRunning=true;
+  await playerFailAnimate();
+  resetPlayer();
   isFailFunctionRunning=false;
 }
 
@@ -164,7 +170,7 @@ let AllObject = [
       this.pointX += this.path[0];
       this.pointY += this.path[1];
       if (this.pointY > 600) {
-        !isFailFunctionRunning&&failfunction();
+        failfunction();
       }
       if (this.upSet > 1) {
         this.upSet -= 1;
@@ -347,7 +353,7 @@ function MouseDown(e) {
   //如果放置的位子沒有物件
 
   chooseX = e.clientX;
-  chooseY = e.clientY;
+  chooseY = e.offsetY;
   chooseY = AutoEditPointY(chooseX, chooseY);
   downCheck = true;
 
@@ -430,7 +436,7 @@ function MouseMove(e) {
 function MouseUp(e) {
   tempDrawing = function() {};
   chooseX = e.clientX;
-  chooseY = e.clientY;
+  chooseY = e.offsetY;
   let tempColor;
   var check = 0;
   if (chooseColor == "yellow") tempColor = yelloImg;
@@ -501,7 +507,7 @@ function MouseUp(e) {
               this.height
             ) == true
           ) {
-            !isFailFunctionRunning&&failfunction();
+            failfunction();
           }
         }
         if (this.Image == blueImg) {
