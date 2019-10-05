@@ -14,7 +14,21 @@ function asdHappyCopy() {
         theStr = "" + theStr + "]";
         return theStr;
     }
-    const yo = `<span style='font-size: large;'></span>
+    const yo = `
+    <style>
+#bg{
+  background: url('https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/birdeggb2777/background1.3.jpg') no-repeat fixed right;
+  width: 100vw;
+  height: 100vh;
+  right: 0;
+  background-size: cover;
+  position: fixed;
+  z-index: -1;
+  opacity: 0.5;
+}
+</style>
+    <div id='bg'></div>
+    <span style='font-size: large;'></span>
     <canvas height='550' id='game' width='750'></canvas>
             <script>let NowObj = 0;
         let rulerPoint = 0;
