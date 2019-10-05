@@ -1,0 +1,76 @@
+﻿<style>
+#bg{
+  background: url('https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/birdeggb2777/background1.3.jpg') no-repeat fixed right;
+  width: 100vw;
+  height: 100vh;
+  right: 0;
+  background-size: cover;
+  position: fixed;
+  z-index: -1;
+  opacity: 0.5;
+}
+</style>
+<link
+  rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+  integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+  crossorigin="anonymous"
+/>
+
+<body style="padding-bottom:150px;">
+  <div id='bg'></div>
+  <!--<audio src="./failAnimate.mp3" id="failAnimateSound"></audio>-->
+  <span style='font-size: large;'></span>
+  <canvas height='550' id='game' width='750'></canvas>
+  <label>座標修正　</label><input type="checkbox" checked='true' id="AutoPoint" style="transform : scale(2); ">
+  <img src='yellow.png' alt='yellow' onclick="chooseColor='yellow';NowObj=-1;setControl();" onchange='blockEdit();'>
+  <img src='green.png' alt='green' onclick="chooseColor='green';NowObj=-1;setControl();" onchange='blockEdit();'>
+  <img src='red2.png' alt='red2' onclick="chooseColor='red2';NowObj=-1;setControl();" onchange='blockEdit();'>
+  <img src='blue.png' alt='blue' onclick="chooseColor='blue';NowObj=-1;setControl();" onchange='blockEdit();'>
+  <img src='magnet1.png' alt='magnet1' width='50' height='50' onclick="chooseColor='magnet1';NowObj=-1;setControl();">
+  <img src='magnet2.png' alt='magnet2' width='50' height='50' onclick="chooseColor='magnet2';NowObj=-1;setControl();"
+      onchange='blockEdit();'>
+  <!-- <button onclick="clone();asdHappyCopy()" class="btn btn-secondary">輸出</button> -->
+  <button onclick="/*asdHappyCopy()*/;download(String(asdHappyCopy()), 'myfilename.html', 'text/plain');"
+      class="btn btn-secondary">輸出</button>
+  <a href="" id="a" style="display: none;">click here to download your file</a>
+  <form class="ml-5 w-25" style="min-width:456px;">
+    <div class="d-flex justify-content-around align-items-center mb-3">
+      <span>名稱：</span>
+      <input
+        class="form-control w-75"
+        type="text"
+        id="formName"
+        value="yellow"
+      />
+    </div>
+    <div class="d-flex justify-content-around align-items-center mb-3">
+      <span> 座標X：</span>
+      <input class="form-control w-75" type="text" id="formX" value="N" />
+    </div>
+    <div class="d-flex justify-content-around align-items-center mb-3">
+      <span> 座標Y：</span>
+      <input class="form-control w-75" type="text" id="formY" value="N" />
+    </div>
+    <div class="d-flex justify-content-around align-items-center mb-3">
+      <span>寬度：</span>
+      <input class="form-control w-75" type="text" id="formWidth" value="50" />
+    </div>
+    <div class="d-flex justify-content-around align-items-center mb-3">
+      <span>高度：</span>
+      <input class="form-control w-75" type="text" id="formHeight" value="50" />
+    </div>
+    <div class="d-flex justify-content-around align-items-center mb-3">
+      <span>路徑：</span>
+      <input
+        class="form-control w-75"
+        type="text"
+        disabled="disabled"
+        id="formPath"
+        value="yellow.png"
+      />
+    </div>
+  </form>
+</body>
+<script src="export1.3.js"></script>
+<script src="edit1.3.js"></script>

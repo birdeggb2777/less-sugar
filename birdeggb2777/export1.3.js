@@ -65,6 +65,7 @@ function asdHappyCopy() {
             await playerFailAnimate();
             resetPlayer();
             isFailFunctionRunning=false;
+            window.location.reload();
           }
         function winfunction() {
             /*AllObject[0].pointY = 0;
