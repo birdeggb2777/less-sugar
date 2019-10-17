@@ -29,6 +29,7 @@ function blockEdit() {
   AllObject[NowObj].width = parseInt(getByID("formWidth").value);
   AllObject[NowObj].height = parseInt(getByID("formHeight").value);
 }
+let isMobile = false;
 let NowObj = 0;
 let rulerPoint = 0;
 let chooseColor = "";
@@ -39,7 +40,6 @@ let TotalXMove = 0;
 let placeDirection = [0, 0];
 let oCanvas = document.getElementById("game"),
   oCtx = oCanvas.getContext("2d");
-
 let tempImg = new Image();
 let yelloImg = new Image();
 yelloImg.src = "yellow.png";
@@ -53,26 +53,97 @@ redImg2.alt = "redImg2";
 let greenImg = new Image();
 greenImg.src = "green.png";
 greenImg.alt = "greenImg";
+let isFailFunctionRunning = false;
 
 window.addEventListener("keydown", KeyDown, true);
 window.addEventListener("keyup", KeyUp, true);
 oCanvas.addEventListener("mousedown", MouseDown, true);
 oCanvas.addEventListener("mousemove", MouseMove, true);
 oCanvas.addEventListener("mouseup", MouseUp, true);
-function failfunction() {
-  //遊戲失敗結束的時候觸發
+~(function getDeviceType() {
+  //主動執行
+  const u = navigator.userAgent,
+    isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1,
+    isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+  if (isAndroid || isiOS) {
+    isMobile = true;
+    document.querySelector('footer .mobi-toy-wrapper').style.display='flex';
+  }
+})();
+function resetPlayer() {
   /* AllObject[0].pointY = 0;
-         placeDirection[0] = 0;
-         placeDirection[1] = 0;
-         for (var i in AllObject) {
-             if (i == 0) continue;
-             AllObject[i].pointX -= TotalXMove;
-         }*/
+  placeDirection[0] = 0;
+  placeDirection[1] = 0;
+  for (var i in AllObject) {
+      if (i == 0) continue;
+      AllObject[i].pointX -= TotalXMove;
+  }*/
+  AllObject[0].width = 45;
+  AllObject[0].height = 45;
   AllObject[0].pointY = 0;
   placeDirection[0] = 0;
   placeDirection[1] = 0;
+  AllObject[0].registerDraw();
+}
+async function failfunction() {
+  //遊戲失敗結束的時候觸發
+  if (isFailFunctionRunning) {
+    return;
+  }
+  isFailFunctionRunning = true;
+  await playerFailAnimate();
+  resetPlayer();
+  isFailFunctionRunning = false;
 }
 
+function playerFailAnimate() {
+  return new Promise(resolve => {
+    failAnimateSound.play();
+    let left = AllObject[0].pointX,
+      right = AllObject[0].pointX,
+      top = AllObject[0].pointY,
+      bottom = AllObject[0].pointY;
+    function animate() {
+      AllObject[0].width -= 2;
+      AllObject[0].height -= 2;
+      function drawLeftTopFragment() {
+        left -= 1;
+        top -= 1;
+        AllObject[0].pointX = left;
+        AllObject[0].pointY = top;
+        AllObject[0].registerDraw();
+      }
+      function drawRightTopFragment() {
+        right += 1;
+        AllObject[0].pointX = right;
+        AllObject[0].pointY = top;
+        AllObject[0].registerDraw();
+      }
+      function drawLeftBottomFragment() {
+        bottom += 1;
+        AllObject[0].pointX = left;
+        AllObject[0].pointY = bottom;
+        AllObject[0].registerDraw();
+      }
+      function drawRightBottomFragment() {
+        AllObject[0].pointX = right;
+        AllObject[0].pointY = bottom;
+        AllObject[0].registerDraw();
+      }
+      drawLeftTopFragment();
+      drawRightTopFragment();
+      drawLeftBottomFragment();
+      drawRightBottomFragment();
+      if (AllObject[0].width <= 0 && AllObject[0].height <= 0) {
+        cancelAnimationFrame(animate);
+        resolve();
+        return;
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+  });
+}
 function winfunction() {
   //遊戲成功結束的時候觸發
   /* AllObject[0].pointY = 0;
@@ -119,7 +190,7 @@ let AllObject = [
         this.path[1] = 0;
       }
     },
-    registerDraw: function() {
+    registerDraw: async function() {
       oCtx.beginPath();
       oCtx.fillStyle = "red";
       oCtx.rect(this.pointX, this.pointY, this.width, this.height);
@@ -237,6 +308,8 @@ let AllObject = [
 
 function KeyDown(e) {
   var keyID = e.keyCode ? e.keyCode : e.which;
+  // 左上右下 37 38 39 40
+  console.log(keyID);
   for (var i in AllObject) {
     if (AllObject[i].registerKeyDown) {
       AllObject[i].registerKeyDown(keyID);
@@ -291,9 +364,8 @@ var timeoutDraw = window.setInterval(function() {
 function MouseDown(e) {
   //點完方塊移到地圖上放下的一瞬間
   //如果放置的位子沒有物件
-
-  chooseX = e.clientX;
-  chooseY = e.clientY;
+  chooseX = e.offsetX;
+  chooseY = e.offsetY;
   chooseY = AutoEditPointY(chooseX, chooseY);
   downCheck = true;
 
@@ -336,11 +408,10 @@ function chooseBlock() {
 }
 function MouseMove(e) {
   downCheck = false;
-  chooseX = e.clientX;
-  chooseY = e.clientY;
+  chooseX = e.offsetX;
+  chooseY = e.offsetY;
   chooseY = AutoEditPointY(chooseX, chooseY);
   var check = 0;
-  //  console.log(chooseColor);
   if (chooseColor == "yellow") {
     tempDrawing = function() {
       oCtx.drawImage(yelloImg, chooseX - 25, chooseY - 25, 45, 45);
@@ -376,8 +447,8 @@ function MouseMove(e) {
 
 function MouseUp(e) {
   tempDrawing = function() {};
-  chooseX = e.clientX;
-  chooseY = e.clientY;
+  chooseX = e.offsetX;
+  chooseY = e.offsetY;
   let tempColor;
   var check = 0;
   if (chooseColor == "yellow") tempColor = yelloImg;
@@ -505,7 +576,6 @@ function MouseUp(e) {
     AllObject[NowObj].width = parseInt(getByID("formWidth").value);
     AllObject[NowObj].height = parseInt(getByID("formHeight").value);
   }
-  console.log(AllObject[NowObj]);
   // if (AllObject[NowObj])
   //alert(parseInt(getByID('formHeight').value));
   chooseColor = "";
