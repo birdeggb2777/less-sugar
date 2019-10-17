@@ -136,7 +136,7 @@ function asdHappyCopy() {
             }*/
             AllObject[0].width= 45;
             AllObject[0].height= 45;
-            //AllObject[0].pointY = 0;
+            AllObject[0].pointY = 0;
             //placeDirection[0] = 0;
             //placeDirection[1] = 0;
             AllObject[0].registerDraw();

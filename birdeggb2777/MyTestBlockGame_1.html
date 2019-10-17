@@ -1,55 +1,137 @@
-<span style='font-size: large;'></span>
-<canvas height='550' id='game' width='750'></canvas>
-        <script>let NowObj = 0;
-    let rulerPoint = 0;
-    let chooseColor = '';
-    let chooseX = 0;
-    let chooseY = 0;
-    let downCheck = false;
-    let TotalXMove = 0;
-    let placeDirection = [0, 0];
-    let oCanvas = document.getElementById('game'),
-        oCtx = oCanvas.getContext('2d');
-    let tempImg = new Image();
-    let yelloImg = new Image();
-    yelloImg.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/yellow.png';
-    let blueImg = new Image();
-    blueImg.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/blue.png';
-    let redImg2 = new Image();
-    redImg2.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/red2.png';
-    let greenImg = new Image();
-    greenImg.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/green.png';
-    window.addEventListener('keydown', KeyDown, true);
-    window.addEventListener('keyup', KeyUp, true);
-    function failfunction() {
-        AllObject[0].pointY = 0;
-        placeDirection[0] = 0;
-        placeDirection[1] = 0;
-        for (var i in AllObject) {
-            if (i == 0) continue;
-            AllObject[i].pointX -= TotalXMove;
+
+    <style>
+#bg{
+  background: url('https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/birdeggb2777/background1.3.jpg') no-repeat fixed right;
+  width: 100vw;
+  height: 100vh;
+  right: 0;
+  background-size: cover;
+  position: fixed;
+  z-index: -1;
+  opacity: 0.5;
+}
+</style>
+    <div id='bg'></div>
+    <span style='font-size: large;'></span>
+    <canvas height='550' id='game' width='750'></canvas>
+            <script>let NowObj = 0;
+        let rulerPoint = 0;
+        let chooseColor = '';
+        let chooseX = 0;
+        let chooseY = 0;
+        let downCheck = false;
+        let TotalXMove = 0;
+        let placeDirection = [0, 0];
+        let isFailFunctionRunning=false;
+        let oCanvas = document.getElementById('game'),
+            oCtx = oCanvas.getContext('2d');
+        let tempImg = new Image();
+        let yelloImg = new Image();
+        yelloImg.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/yellow.png';
+        let blueImg = new Image();
+        blueImg.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/blue.png';
+        let redImg2 = new Image();
+        redImg2.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/red2.png';
+        let greenImg = new Image();
+        greenImg.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/green.png';
+        let magnet1Img = new Image();
+        magnet1Img.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/magnet1.png';
+        let magnet2Img = new Image();
+        magnet2Img.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/magnet2.png';
+        window.addEventListener('keydown', KeyDown, true);
+        window.addEventListener('keyup', KeyUp, true);
+        async function failfunction() {
+            //遊戲失敗結束的時候觸發
+            if(isFailFunctionRunning){
+              return;
+            }
+            isFailFunctionRunning=true;
+            await playerFailAnimate();
+            resetPlayer();
+            isFailFunctionRunning=false;
+            window.location.reload();
+          }
+        function winfunction() {
+            /*AllObject[0].pointY = 0;
+            placeDirection[0] = 0;
+            placeDirection[1] = 0;
+            for (var i in AllObject) {
+                if (i == 0) continue;
+                AllObject[i].pointX -= TotalXMove;
+            }*/
+            clearInterval(timeoutCode);
+            alert('win');
         }
-        alert('fail');
-        window.location.reload();
-    }
-    function winfunction() {
-        /*AllObject[0].pointY = 0;
-        placeDirection[0] = 0;
-        placeDirection[1] = 0;
-        for (var i in AllObject) {
-            if (i == 0) continue;
-            AllObject[i].pointX -= TotalXMove;
-        }*/
-        clearInterval(timeoutCode);
-        alert('win');
-    }
-    let tempDrawing = function () { };
-    function pounch(x, y, w, h, x2, y2, w2, h2) {
-        if (y + h >= y2 && x + w >= x2 && y < y2 + h2 && x < x2 + w2)
-            return true;
-        return false;
-    };
-    let AllObject=[{name:'Me',pointX:183,pointY:26,width:45,height:45,upSet:0,upHeight:120,downSpeed:0.5,speed:1,path:[0,0],code:function () {
+        function playerFailAnimate(){
+            return new Promise(resolve => {
+              //failAnimateSound.play();
+              let left=AllObject[0].pointX,
+                  right=AllObject[0].pointX,
+                  top=AllObject[0].pointY,
+                  bottom=AllObject[0].pointY;
+              function animate(){
+                AllObject[0].width-=2;
+                AllObject[0].height-=2;
+                function drawLeftTopFragment(){
+                  left-=1;
+                  top-=1;
+                  AllObject[0].pointX=left;
+                  AllObject[0].pointY=top;
+                  AllObject[0].registerDraw();
+                }
+                function drawRightTopFragment(){
+                  right+=1;
+                  AllObject[0].pointX=right;
+                  AllObject[0].pointY=top;
+                  AllObject[0].registerDraw();
+                }
+                function drawLeftBottomFragment(){
+                  bottom+=1;
+                  AllObject[0].pointX=left;
+                  AllObject[0].pointY=bottom;
+                  AllObject[0].registerDraw();
+                }
+                function drawRightBottomFragment(){
+                  AllObject[0].pointX=right;
+                  AllObject[0].pointY=bottom;
+                  AllObject[0].registerDraw();
+                }
+                drawLeftTopFragment();
+                drawRightTopFragment();
+                drawLeftBottomFragment();
+                drawRightBottomFragment();
+                if(AllObject[0].width<=0&&AllObject[0].height<=0){
+                  cancelAnimationFrame(animate);
+                  resolve();
+                  return;
+                }
+                requestAnimationFrame(animate);
+              }
+              animate();
+              });
+          }
+          function resetPlayer(){
+            /* AllObject[0].pointY = 0;
+            //placeDirection[0] = 0;
+            //placeDirection[1] = 0;
+            for (var i in AllObject) {
+                if (i == 0) continue;
+                AllObject[i].pointX -= TotalXMove;
+            }*/
+            AllObject[0].width= 45;
+            AllObject[0].height= 45;
+            //AllObject[0].pointY = 0;
+            //placeDirection[0] = 0;
+            //placeDirection[1] = 0;
+            AllObject[0].registerDraw();
+          }
+        let tempDrawing = function () { };
+        function pounch(x, y, w, h, x2, y2, w2, h2) {
+            if (y + h >= y2 && x + w >= x2 && y < y2 + h2 && x < x2 + w2)
+                return true;
+            return false;
+        };
+        let AllObject=[{name:'Me',pointX:453,pointY:0.5,width:45,height:45,upSet:0,upHeight:120,downSpeed:0.5,speed:1,path:[0,0],code:function () {
             this.pointX += this.path[0];
             this.pointY += this.path[1];
             if (this.pointY > 600) {
@@ -116,7 +198,7 @@
             if (key === 37 || key === 65) { // left arrow and A 
                 placeDirection[0] = 0;
             }
-        },},{name:'yellow',pointX:774,pointY:288,width:50,height:50,path:[0,0],Image:yelloImg,code:function () {
+        },},{name:'yellow',pointX:1034,pointY:288,width:50,height:50,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -151,7 +233,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:823,pointY:288,width:50,height:50,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:1083,pointY:288,width:50,height:50,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -186,7 +268,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:874,pointY:288,width:50,height:50,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:1134,pointY:288,width:50,height:50,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -221,7 +303,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:924,pointY:288,width:50,height:50,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:1184,pointY:288,width:50,height:50,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -256,7 +338,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:969,pointY:243,width:50,height:50,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:1229,pointY:243,width:50,height:50,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -291,7 +373,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1017,pointY:284,width:50,height:50,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:1277,pointY:284,width:50,height:50,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -326,7 +408,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:1115,pointY:197,width:50,height:50,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:1375,pointY:197,width:50,height:50,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -361,7 +443,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1069,pointY:243,width:50,height:50,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:1329,pointY:243,width:50,height:50,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -396,7 +478,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'blue',pointX:1172,pointY:197,width:50,height:50,path:[0,0],Image:blueImg,code:function () {
+                },},{name:'blue',pointX:1432,pointY:197,width:50,height:50,path:[0,0],Image:blueImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -431,7 +513,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1222,pointY:237,width:50,height:50,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:1482,pointY:237,width:50,height:50,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -466,7 +548,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1275,pointY:237,width:50,height:50,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:1535,pointY:237,width:50,height:50,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -501,7 +583,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'blue',pointX:1325,pointY:197,width:50,height:50,path:[0,0],Image:blueImg,code:function () {
+                },},{name:'blue',pointX:1585,pointY:197,width:50,height:50,path:[0,0],Image:blueImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -536,7 +618,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1388,pointY:240,width:50,height:50,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:1648,pointY:240,width:50,height:50,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -571,7 +653,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1436,pointY:240,width:50,height:50,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:1696,pointY:240,width:50,height:50,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -606,7 +688,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'blue',pointX:1491,pointY:196,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
+                },},{name:'blue',pointX:1751,pointY:196,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -641,7 +723,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1551,pointY:153,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:1811,pointY:153,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -676,7 +758,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1549,pointY:196,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:1809,pointY:196,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -711,7 +793,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1549,pointY:243,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:1809,pointY:243,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -746,7 +828,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1551,pointY:285,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:1811,pointY:285,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -781,7 +863,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:1546,pointY:387,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:1806,pointY:387,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -816,7 +898,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1496,pointY:429,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:1756,pointY:429,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -851,7 +933,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'blue',pointX:1650,pointY:373.7999999999997,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
+                },},{name:'blue',pointX:1910,pointY:373.7999999999997,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -886,7 +968,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:1601,pointY:387,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:1861,pointY:387,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -921,7 +1003,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'blue',pointX:1698,pointY:354.39999999999975,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
+                },},{name:'blue',pointX:1958,pointY:354.39999999999975,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -956,7 +1038,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'blue',pointX:1748,pointY:335,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
+                },},{name:'blue',pointX:2008,pointY:335,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -991,7 +1073,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:1792,pointY:318,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:2052,pointY:318,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1026,7 +1108,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1884,pointY:316,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:2144,pointY:316,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1061,7 +1143,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1886,pointY:363,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:2146,pointY:363,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1096,7 +1178,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1886,pointY:410,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:2146,pointY:410,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1131,7 +1213,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1999,pointY:319,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:2259,pointY:319,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1166,7 +1248,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1999,pointY:365,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:2259,pointY:365,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1201,7 +1283,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:2000,pointY:412,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:2260,pointY:412,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1236,7 +1318,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'green',pointX:1943,pointY:458,width:45,height:45,path:[0,0],Image:greenImg,code:function () {
+                },},{name:'green',pointX:2203,pointY:458,width:45,height:45,path:[0,0],Image:greenImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1271,7 +1353,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1999,pointY:460,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:2259,pointY:460,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1306,7 +1388,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:1885,pointY:454,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:2145,pointY:454,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1341,7 +1423,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:463,pointY:142,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:723,pointY:142,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1376,7 +1458,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'blue',pointX:293,pointY:646.1999999999789,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
+                },},{name:'blue',pointX:553,pointY:646.1999999999789,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1411,7 +1493,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'blue',pointX:640,pointY:270,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
+                },},{name:'blue',pointX:900,pointY:270,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1446,7 +1528,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'blue',pointX:684,pointY:280,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
+                },},{name:'blue',pointX:944,pointY:280,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1481,7 +1563,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'blue',pointX:727,pointY:289,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
+                },},{name:'blue',pointX:987,pointY:289,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1516,7 +1598,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'blue',pointX:597,pointY:263,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
+                },},{name:'blue',pointX:857,pointY:263,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1551,7 +1633,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'blue',pointX:555,pointY:256,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
+                },},{name:'blue',pointX:815,pointY:256,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1586,7 +1668,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'blue',pointX:513,pointY:246,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
+                },},{name:'blue',pointX:773,pointY:246,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1621,7 +1703,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'blue',pointX:469,pointY:235,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
+                },},{name:'blue',pointX:729,pointY:235,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1656,7 +1738,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:509,pointY:155,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:769,pointY:155,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1691,7 +1773,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:553,pointY:165,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:813,pointY:165,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1726,7 +1808,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:594,pointY:175,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:854,pointY:175,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1761,7 +1843,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:636,pointY:186,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:896,pointY:186,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1796,7 +1878,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:680,pointY:195,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:940,pointY:195,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1831,7 +1913,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:730,pointY:195,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:990,pointY:195,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1866,7 +1948,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:405,pointY:235,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:665,pointY:235,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1901,7 +1983,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:301,pointY:235,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:561,pointY:235,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1936,7 +2018,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:249,pointY:235,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:509,pointY:235,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -1971,7 +2053,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'yellow',pointX:351,pointY:235,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
+                },},{name:'yellow',pointX:611,pointY:235,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -2006,7 +2088,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:244,pointY:9,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:504,pointY:9,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -2041,7 +2123,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:112,pointY:8,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:372,pointY:8,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -2076,7 +2158,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:245,pointY:57,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:505,pointY:57,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -2111,7 +2193,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:112,pointY:51,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:372,pointY:51,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -2146,7 +2228,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:111,pointY:99,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:371,pointY:99,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -2181,7 +2263,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:200,pointY:282,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:460,pointY:282,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -2216,7 +2298,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:152,pointY:282,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:412,pointY:282,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -2251,7 +2333,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:106,pointY:282,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:366,pointY:282,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -2286,7 +2368,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:246,pointY:108,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:506,pointY:108,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -2321,7 +2403,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:60,pointY:282,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:320,pointY:282,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -2356,7 +2438,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:3,pointY:282,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:263,pointY:282,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -2391,7 +2473,7 @@
                     oCtx.beginPath();
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
-                },},{name:'red2',pointX:-43,pointY:282,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
+                },},{name:'red2',pointX:217,pointY:282,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
                     let check = 0;
                     for (var i in AllObject) {
                         if (i == 0) continue;
@@ -2427,40 +2509,40 @@
                     oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
                     oCtx.closePath();
                 },},];
-    function KeyDown(e) {                                   
-        var keyID = e.keyCode ? e.keyCode : e.which;               
-        for (var i in AllObject) {                                 
-            if (AllObject[i].registerKeyDown) {                    
-                AllObject[i].registerKeyDown(keyID);               
-            }                                                      
-        }                                                          
-    }                                                              
-    function KeyUp(e) {                                            
-        var keyID = e.keyCode ? e.keyCode : e.which;               
-        for (var i in AllObject) {                                 
-            if (AllObject[i].registerKeyUp) {                      
-                AllObject[i].registerKeyUp(keyID);                 
-            }                                                      
-        }                                                          
-    }                                                              
-    var timeoutCode = window.setInterval(function () {             
-        for (var i in AllObject) {                                 
-            if (AllObject[i].code) {                               
-                AllObject[i].code();                               
-            }                                                      
-        }                                                          
-        for (var i in AllObject) {                                 
-            if (AllObject[i].pounch) {                             
-                AllObject[i].pounch();                             
-            }                                                      
-        }                                                          
-                                                                   
-    });                                                            
-    var timeoutDraw = window.setInterval(function () {             
-        oCtx.clearRect(0, 0, oCanvas.width, oCanvas.height);       
-        for (var i in AllObject) {                                 
-            if (AllObject[i].registerDraw) {                       
-                AllObject[i].registerDraw();                       
-            }                                                      
-        }                                                          
-        tempDrawing(); }) </script>
+        function KeyDown(e) {                                   
+            var keyID = e.keyCode ? e.keyCode : e.which;               
+            for (var i in AllObject) {                                 
+                if (AllObject[i].registerKeyDown) {                    
+                    AllObject[i].registerKeyDown(keyID);               
+                }                                                      
+            }                                                          
+        }                                                              
+        function KeyUp(e) {                                            
+            var keyID = e.keyCode ? e.keyCode : e.which;               
+            for (var i in AllObject) {                                 
+                if (AllObject[i].registerKeyUp) {                      
+                    AllObject[i].registerKeyUp(keyID);                 
+                }                                                      
+            }                                                          
+        }                                                              
+        var timeoutCode = window.setInterval(function () {             
+            for (var i in AllObject) {                                 
+                if (AllObject[i].code) {                               
+                    AllObject[i].code();                               
+                }                                                      
+            }                                                          
+            for (var i in AllObject) {                                 
+                if (AllObject[i].pounch) {                             
+                    AllObject[i].pounch();                             
+                }                                                      
+            }                                                          
+                                                                       
+        });                                                            
+        var timeoutDraw = window.setInterval(function () {             
+            oCtx.clearRect(0, 0, oCanvas.width, oCanvas.height);       
+            for (var i in AllObject) {                                 
+                if (AllObject[i].registerDraw) {                       
+                    AllObject[i].registerDraw();                       
+                }                                                      
+            }                                                          
+            tempDrawing(); }) </script>
