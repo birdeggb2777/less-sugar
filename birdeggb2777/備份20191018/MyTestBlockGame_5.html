@@ -15,7 +15,6 @@
     <span style='font-size: large;'></span>
     <canvas height='550' id='game' width='750'></canvas>
             <script>let NowObj = 0;
-        let magnetSpeed = 0;
         let rulerPoint = 0;
         let chooseColor = '';
         let chooseX = 0;
@@ -46,9 +45,9 @@
             if(isFailFunctionRunning){
               return;
             }
-            isFailFunctionRunning=true; 
-            resetPlayer();
+            isFailFunctionRunning=true;
             await playerFailAnimate();
+            resetPlayer();
             isFailFunctionRunning=false;
             window.location.reload();
           }
@@ -132,9 +131,7 @@
                 return true;
             return false;
         };
-        let AllObject=[{name:'Me',pointX:229,pointY:372.5,width:45,height:45,upSet:0,upHeight:120,downSpeed:0.5,speed:1,path:[0,0],magnet:function () {
-        //this.pointX -= magnetSpeed;
-      },code:function () {
+        let AllObject=[{name:'Me',pointX:229,pointY:372.5,width:45,height:45,upSet:0,upHeight:120,downSpeed:0.5,speed:1,path:[0,0],code:function () {
       this.pointX += this.path[0];
       this.pointY += this.path[1];
       if (this.pointY > 600) {
@@ -240,9 +237,7 @@
         // left arrow and A
         placeDirection[0] = 0;
       }
-    },},{name:'yellow',pointX:233,pointY:418,width:45,height:45,path:[0,0],Image:yelloImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+    },},{name:'yellow',pointX:233,pointY:418,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -251,7 +246,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -269,9 +264,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -281,14 +276,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -301,9 +296,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'yellow',pointX:284,pointY:375,width:45,height:90,path:[0,0],Image:yelloImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'yellow',pointX:284,pointY:375,width:45,height:90,path:[0,0],Image:yelloImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -312,7 +305,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -330,9 +323,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -342,14 +335,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -362,9 +355,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'yellow',pointX:177,pointY:374,width:45,height:90,path:[0,0],Image:yelloImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'yellow',pointX:177,pointY:374,width:45,height:90,path:[0,0],Image:yelloImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -373,7 +364,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -391,9 +382,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -403,14 +394,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -423,9 +414,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'magnet1',pointX:221,pointY:61,width:90,height:90,path:[0,0],Image:magnet1Img,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'magnet1',pointX:221,pointY:61,width:90,height:90,path:[0,0],Image:magnet1Img,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -434,7 +423,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -452,9 +441,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -464,14 +453,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -484,9 +473,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'red2',pointX:343,pointY:423,width:90,height:45,path:[0,0],Image:redImg2,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'red2',pointX:343,pointY:423,width:90,height:45,path:[0,0],Image:redImg2,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -495,7 +482,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -513,9 +500,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -525,14 +512,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -545,9 +532,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'red2',pointX:446,pointY:423,width:90,height:45,path:[0,0],Image:redImg2,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'red2',pointX:446,pointY:423,width:90,height:45,path:[0,0],Image:redImg2,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -556,7 +541,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -574,9 +559,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -586,14 +571,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -606,9 +591,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'red2',pointX:544,pointY:423,width:90,height:45,path:[0,0],Image:redImg2,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'red2',pointX:544,pointY:423,width:90,height:45,path:[0,0],Image:redImg2,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -617,7 +600,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -635,9 +618,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -647,14 +630,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -667,9 +650,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'blue',pointX:691,pointY:377,width:45,height:45,path:[0,0],Image:blueImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'blue',pointX:691,pointY:377,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -678,7 +659,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -696,9 +677,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -708,14 +689,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -728,9 +709,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'yellow',pointX:628,pointY:377,width:45,height:45,path:[0,0],Image:yelloImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'yellow',pointX:628,pointY:377,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -739,7 +718,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -757,9 +736,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -769,14 +748,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -789,9 +768,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'blue',pointX:751,pointY:377.79999999999995,width:45,height:45,path:[0,0],Image:blueImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'blue',pointX:751,pointY:377.79999999999995,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -800,7 +777,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -818,9 +795,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -830,14 +807,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -850,9 +827,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'blue',pointX:1080,pointY:324,width:45,height:45,path:[0,0],Image:blueImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'blue',pointX:1080,pointY:324,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -861,7 +836,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -879,9 +854,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -891,14 +866,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -911,9 +886,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'red2',pointX:647,pointY:423,width:90,height:45,path:[0,0],Image:redImg2,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'red2',pointX:647,pointY:423,width:90,height:45,path:[0,0],Image:redImg2,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -922,7 +895,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -940,9 +913,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -952,14 +925,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -972,9 +945,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'red2',pointX:757,pointY:423,width:90,height:45,path:[0,0],Image:redImg2,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'red2',pointX:757,pointY:423,width:90,height:45,path:[0,0],Image:redImg2,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -983,7 +954,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -1001,9 +972,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -1013,14 +984,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -1033,9 +1004,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'magnet1',pointX:836,pointY:34,width:90,height:90,path:[0,0],Image:magnet1Img,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'magnet1',pointX:836,pointY:34,width:90,height:90,path:[0,0],Image:magnet1Img,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -1044,7 +1013,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -1062,9 +1031,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -1074,14 +1043,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -1094,9 +1063,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'yellow',pointX:944,pointY:227,width:90,height:90,path:[0,0],Image:yelloImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'yellow',pointX:944,pointY:227,width:90,height:90,path:[0,0],Image:yelloImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -1105,7 +1072,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -1123,9 +1090,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -1135,14 +1102,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -1155,9 +1122,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'magnet2',pointX:976,pointY:357,width:90,height:90,path:[0,0],Image:magnet2Img,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'magnet2',pointX:976,pointY:357,width:90,height:90,path:[0,0],Image:magnet2Img,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -1166,7 +1131,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -1184,9 +1149,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -1196,14 +1161,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -1216,9 +1181,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'yellow',pointX:808,pointY:377.4,width:45,height:45,path:[0,0],Image:yelloImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'yellow',pointX:808,pointY:377.4,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -1227,7 +1190,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -1245,9 +1208,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -1257,14 +1220,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -1277,9 +1240,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'magnet2',pointX:1239,pointY:236,width:90,height:90,path:[0,0],Image:magnet2Img,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'magnet2',pointX:1239,pointY:236,width:90,height:90,path:[0,0],Image:magnet2Img,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -1288,7 +1249,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -1306,9 +1267,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -1318,14 +1279,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -1338,9 +1299,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'blue',pointX:1142,pointY:324,width:45,height:45,path:[0,0],Image:blueImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'blue',pointX:1142,pointY:324,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -1349,7 +1308,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -1367,9 +1326,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -1379,14 +1338,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -1399,9 +1358,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'blue',pointX:1198,pointY:324,width:45,height:45,path:[0,0],Image:blueImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'blue',pointX:1198,pointY:324,width:45,height:45,path:[0,0],Image:blueImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -1410,7 +1367,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -1428,9 +1385,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -1440,14 +1397,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -1460,9 +1417,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'yellow',pointX:1209,pointY:473,width:45,height:45,path:[0,0],Image:yelloImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'yellow',pointX:1209,pointY:473,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -1471,7 +1426,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -1489,9 +1444,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -1501,14 +1456,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -1521,9 +1476,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'yellow',pointX:1265,pointY:473,width:45,height:45,path:[0,0],Image:yelloImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'yellow',pointX:1265,pointY:473,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -1532,7 +1485,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -1550,9 +1503,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -1562,14 +1515,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -1582,9 +1535,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'magnet1',pointX:1330,pointY:80,width:90,height:90,path:[0,0],Image:magnet1Img,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'magnet1',pointX:1330,pointY:80,width:90,height:90,path:[0,0],Image:magnet1Img,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -1593,7 +1544,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -1611,9 +1562,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -1623,14 +1574,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -1643,9 +1594,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'magnet2',pointX:1450,pointY:239,width:90,height:90,path:[0,0],Image:magnet2Img,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'magnet2',pointX:1450,pointY:239,width:90,height:90,path:[0,0],Image:magnet2Img,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -1654,7 +1603,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -1672,9 +1621,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -1684,14 +1633,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -1704,9 +1653,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'yellow',pointX:1313,pointY:473,width:45,height:45,path:[0,0],Image:yelloImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'yellow',pointX:1313,pointY:473,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -1715,7 +1662,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -1733,9 +1680,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -1745,14 +1692,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -1765,9 +1712,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'red2',pointX:1368,pointY:473,width:45,height:45,path:[0,0],Image:redImg2,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'red2',pointX:1368,pointY:473,width:45,height:45,path:[0,0],Image:redImg2,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -1776,7 +1721,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -1794,9 +1739,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -1806,14 +1751,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -1826,9 +1771,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'yellow',pointX:1427,pointY:473,width:45,height:45,path:[0,0],Image:yelloImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'yellow',pointX:1427,pointY:473,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -1837,7 +1780,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -1855,9 +1798,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -1867,14 +1810,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -1887,9 +1830,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'yellow',pointX:1478,pointY:415,width:45,height:45,path:[0,0],Image:yelloImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'yellow',pointX:1478,pointY:415,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -1898,7 +1839,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -1916,9 +1857,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -1928,14 +1869,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -1948,9 +1889,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'yellow',pointX:1540,pointY:415,width:45,height:45,path:[0,0],Image:yelloImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'yellow',pointX:1540,pointY:415,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -1959,7 +1898,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -1977,9 +1916,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -1989,14 +1928,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -2009,9 +1948,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'magnet1',pointX:1596,pointY:106,width:90,height:90,path:[0,0],Image:magnet1Img,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'magnet1',pointX:1596,pointY:106,width:90,height:90,path:[0,0],Image:magnet1Img,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -2020,7 +1957,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -2038,9 +1975,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -2050,14 +1987,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -2070,9 +2007,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'magnet2',pointX:1802,pointY:279,width:90,height:90,path:[0,0],Image:magnet2Img,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'magnet2',pointX:1802,pointY:279,width:90,height:90,path:[0,0],Image:magnet2Img,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -2081,7 +2016,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -2099,9 +2034,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -2111,14 +2046,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -2131,9 +2066,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'green',pointX:773,pointY:34,width:45,height:45,path:[0,0],Image:greenImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'green',pointX:773,pointY:34,width:45,height:45,path:[0,0],Image:greenImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -2142,7 +2075,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -2160,9 +2093,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -2172,14 +2105,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -2192,9 +2125,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'yellow',pointX:1126,pointY:29,width:90,height:90,path:[0,0],Image:yelloImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'yellow',pointX:1126,pointY:29,width:90,height:90,path:[0,0],Image:yelloImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -2203,7 +2134,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -2221,9 +2152,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -2233,14 +2164,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -2253,9 +2184,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'magnet1',pointX:1813,pointY:-24,width:90,height:90,path:[0,0],Image:magnet1Img,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'magnet1',pointX:1813,pointY:-24,width:90,height:90,path:[0,0],Image:magnet1Img,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -2264,7 +2193,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -2282,9 +2211,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -2294,14 +2223,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -2314,9 +2243,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'magnet1',pointX:1916,pointY:-24,width:90,height:90,path:[0,0],Image:magnet1Img,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'magnet1',pointX:1916,pointY:-24,width:90,height:90,path:[0,0],Image:magnet1Img,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -2325,7 +2252,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -2343,9 +2270,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -2355,14 +2282,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -2375,9 +2302,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'yellow',pointX:1745,pointY:147,width:45,height:45,path:[0,0],Image:yelloImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'yellow',pointX:1745,pointY:147,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -2386,7 +2311,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -2404,9 +2329,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -2416,14 +2341,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -2436,9 +2361,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'yellow',pointX:1692,pointY:147,width:45,height:45,path:[0,0],Image:yelloImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'yellow',pointX:1692,pointY:147,width:45,height:45,path:[0,0],Image:yelloImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -2447,7 +2370,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -2465,9 +2388,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -2477,14 +2400,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -2497,9 +2420,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'green',pointX:1902,pointY:324,width:45,height:45,path:[0,0],Image:greenImg,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'green',pointX:1902,pointY:324,width:45,height:45,path:[0,0],Image:greenImg,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -2508,7 +2429,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -2526,9 +2447,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -2538,14 +2459,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -2558,9 +2479,7 @@
         oCtx.beginPath();
         oCtx.drawImage(this.Image, this.pointX, this.pointY, this.width, this.height);
         oCtx.closePath();
-      },},{name:'magnet1',pointX:2011,pointY:-22,width:90,height:90,path:[0,0],Image:magnet1Img,magnet:function () {
-        this.pointX -= magnetSpeed;
-      },code:function () {
+      },},{name:'magnet1',pointX:2011,pointY:-22,width:90,height:90,path:[0,0],Image:magnet1Img,code:function () {
         let check = 0;
         for (var i in AllObject) {
           if (i == 0) continue;
@@ -2569,7 +2488,7 @@
             check = 1;
           }
         }
-         if (check == 0 || isFailFunctionRunning) this.pointX += placeDirection[0];
+        if (check == 0) this.pointX += placeDirection[0];
         this.pointY += placeDirection[1];
       },pounch:function () {
         if (this.Image == redImg2) {
@@ -2587,9 +2506,9 @@
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY - AllObject[0].downSpeed, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet1Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
@@ -2599,14 +2518,14 @@
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX - AllObject[0].speed, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
-            this.pointX, this.pointY, this.width, this.height) == true) if (!isFailFunctionRunning) {
-              failfunction();
-            }
+            this.pointX, this.pointY, this.width, this.height) == true) {
+            failfunction();
+          }
         }
         if (this.Image == magnet2Img) {
           if (pounch(AllObject[0].pointX, AllObject[0].pointY, AllObject[0].width, AllObject[0].height,
             this.pointX - this.width, this.pointY, this.width * 2, this.height) == true) {
-            magnetSpeed += 1;
+            AllObject[0].pointX += 1;
           }
         }
         if (this.Image == greenImg) {
@@ -2636,24 +2555,18 @@
                 }                                                      
             }                                                          
         }                                                              
-        var timeoutCode = window.setInterval(function () {   
-            magnetSpeed = 0;            
+        var timeoutCode = window.setInterval(function () {             
             for (var i in AllObject) {                                 
                 if (AllObject[i].code) {                               
                     AllObject[i].code();                               
                 }                                                      
-            }                                                    
+            }                                                          
             for (var i in AllObject) {                                 
                 if (AllObject[i].pounch) {                             
                     AllObject[i].pounch();                             
                 }                                                      
             }                                                          
-            for (var i in AllObject) {
-                if (AllObject[i].magnet) {
-                  AllObject[i].magnet();
-                }
-            }
-            magnetSpeed = 0;                                                           
+                                                                       
         });                                                            
         var timeoutDraw = window.setInterval(function () {             
             oCtx.clearRect(0, 0, oCanvas.width, oCanvas.height);       
