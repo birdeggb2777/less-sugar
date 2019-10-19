@@ -1,7 +1,7 @@
 window.onload = function () {
   var arr = ['速度', '左右移動範圍', '左右移動範圍', '左右移動範圍'];
   var str = '';
-  var oDiv=document.createElement('div');
+  var oDiv = document.createElement('div');
   for (let index = 0; index < arr.length; index++) {
     html = `<div class="d-flex justify-content-around align-items-center mb-3"  id="objValue${index + 1}Container">
         <span id="FormobjValue${index + 1}">${arr[index]}</span>
@@ -9,7 +9,7 @@ window.onload = function () {
       </div>`;
     str += html;
   }
-  oDiv.innerHTML=str;
+  oDiv.innerHTML = str;
   //window.a=oDiv;
   form.append(oDiv);
   for (let index = 1; index < 4 + 1; index++) {
@@ -38,15 +38,17 @@ function setControl() {
   }
   if (chooseColor == 'laser') {
     for (let index = 1; index < 4 + 1; index++) {
-      this.getByID(`objValue${index}Container`).classList.remove('d-flex')
+      this.getByID(`objValue${index}Container`).classList.remove('d-flex');
       this.getByID(`objValue${index}Container`).classList.add('d-none');
     }
+    this.getByID(`objValue${1}Container`).classList.remove('d-flex');
+    this.getByID(`objValue${4}Container`).classList.remove('d-flex');
     this.getByID(`objValue${1}Container`).classList.add('d-flex');
     this.getByID(`objValue${4}Container`).classList.add('d-flex');
     getByID('objValue4').value = '150';
     getByID('objValue1').value = '0.5';
     //console.log('通通出現');
-    
+
   } else {
     for (let index = 1; index < 4 + 1; index++) {
       this.getByID(`objValue${index}Container`).classList.remove('d-flex')
@@ -70,20 +72,23 @@ function blockEdit() {
   // if (chooseColor != "edit" && chooseColor != "") return;
   if (chooseColor == "" && AllObject[NowObj]) {
     AllObject[NowObj].name = getByID('formName').value;
-    AllObject[NowObj].pointX = chooseX - parseInt(getByID('formWidth').value / 2);
-    AllObject[NowObj].pointY = chooseY - parseInt(getByID('formHeight').value / 2);
+    AllObject[NowObj].pointX = parseInt(getByID("formX").value);
+    AllObject[NowObj].pointY = parseInt(getByID("formY").value);
     AllObject[NowObj].width = parseInt(getByID('formWidth').value);
     AllObject[NowObj].height = parseInt(getByID('formHeight').value);
-    return
+    // return
   }
   else if (chooseColor == "edit") {
     AllObject[NowObj].name = getByID("formName").value;
-    //這個不會起作用 start
-    AllObject[NowObj].pointX = parseInt(getByID("formX").value);
-    AllObject[NowObj].pointY = parseInt(getByID("formY").value);
-    //不會起作用 end
+    AllObject[NowObj].pointX = chooseX - parseInt(getByID('formWidth').value / 2);
+    AllObject[NowObj].pointY = chooseY - parseInt(getByID('formHeight').value / 2);
     AllObject[NowObj].width = parseInt(getByID("formWidth").value);
     AllObject[NowObj].height = parseInt(getByID("formHeight").value);
+  }
+  if (AllObject[NowObj] && AllObject[NowObj].Image && AllObject[NowObj].Image == laserBlockImg) {
+    AllObject[NowObj].objValue3 = parseFloat(getByID('objValue4').value);
+    AllObject[NowObj].speed = parseFloat(getByID('objValue1').value);
+    // alert("");
   }
 }
 ///////////////////
@@ -459,12 +464,44 @@ function chooseBlock() {
         getByID("formName").value = AllObject[i].name;
         getByID("formWidth").value = AllObject[i].width;
         getByID("formHeight").value = AllObject[i].height;
+        try {
+          getByID('objValue4').value = AllObject[i].objValue3;
+          getByID('objValue1').value = AllObject[i].speed;
+        } catch (ex) { }
+        // alert("");
         tempImg = AllObject[i].Image;
         NowObj = i;
         // alert(NowObj);
         break;
       }
     }
+  }
+  chooseLaser();
+}
+function chooseLaser() {
+  if (tempImg == laserBlockImg) {
+    for (let index = 1; index < 4 + 1; index++) {
+      this.getByID(`objValue${index}Container`).classList.remove('d-flex');
+      this.getByID(`objValue${index}Container`).classList.add('d-none');
+    }
+    this.getByID(`objValue${1}Container`).classList.remove('d-flex');
+    this.getByID(`objValue${4}Container`).classList.remove('d-flex');
+    this.getByID(`objValue${1}Container`).classList.add('d-flex');
+    this.getByID(`objValue${4}Container`).classList.add('d-flex');
+    // getByID('objValue4').value = '150';
+    // getByID('objValue1').value = '0.5';
+    //console.log('通通出現');
+
+  } else {
+    for (let index = 1; index < 4 + 1; index++) {
+      this.getByID(`objValue${index}Container`).classList.remove('d-flex')
+      this.getByID(`objValue${index}Container`).classList.add('d-none');
+      //console.log('全都是none');
+    }
+    /*for (let index = 1; index < 4 + 1; index++) {
+      this.getByID(`objValue${index}`).value = '0';
+      this.getByID(`objValue${index}`).value = '0';
+    }*/
   }
 }
 function MouseMove(e) {

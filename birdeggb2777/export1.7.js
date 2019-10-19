@@ -56,10 +56,10 @@ function asdHappyCopy() {
         let magnet2Img = new Image();
         magnet2Img.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/magnet2.png';
         let laserBlockImg = new Image();
-        laserBlockImg.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/magnet2.png';
+        laserBlockImg.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/laserblock.png';
         laserBlockImg.alt = 'laserBlockImg';
         let laserImg = new Image();
-        laserImg.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/magnet2.png';
+        laserImg.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/laser.png';
         laserImg.alt = 'laserImg';
         window.addEventListener('keydown', KeyDown, true);
         window.addEventListener('keyup', KeyUp, true);
