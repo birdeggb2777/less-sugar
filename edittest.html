@@ -39,7 +39,7 @@
   }
 
   #bg {
-    background: url('./bg.jpg') no-repeat fixed right;
+    background: url('bg.jpg') no-repeat fixed right;
     width: 100vw;
     height: 100vh;
     right: 0;
@@ -92,7 +92,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border:0;
+    border: 0;
     border-radius: 50%;
     width: 130px;
     height: 130px;
@@ -100,7 +100,8 @@
     font-weight: 900;
     color: black;
   }
-  .mobi-toy-wrapper>[class^='keyboard']:hover{
+
+  .mobi-toy-wrapper>[class^='keyboard']:hover {
     background: gray;
   }
 </style>
@@ -108,9 +109,8 @@
   integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous" />
 <link href="https://fonts.googleapis.com/css?family=Mansalva&display=swap" rel="stylesheet">
 
-<body>
+<body style="padding-bottom:150px;">
   <div id='bg'></div>
-  <audio src="./failAnimate.mp3" id="failAnimateSound"></audio>
   <section class="d-flex container-wrapper flex-wrap justify-content-around">
     <section class="flex-grow-1 h-100 container-left-wrapper">
       <section class="images-wrapper h-50">
@@ -153,11 +153,19 @@
             <div class="d-flex justify-content-around align-items-center mb-3">
               <span>路徑：</span>
               <input class="form-control w-75" type="text" disabled="disabled" id="formPath" value="yellow.png" onchange='blockEdit();'/>
+<<<<<<< HEAD
             </div>
             <!-- <div class="d-flex justify-content-around align-items-center mb-3"  id="objValue1Container">
               <span id="objValue1">速度：</span>
               <input class="form-control w-75" type="text" id="formHeight" value="0.5" onchange='blockEdit();'/>
             </div>
+=======
+            </div>
+            <!-- <div class="d-flex justify-content-around align-items-center mb-3"  id="objValue1Container">
+              <span id="objValue1">速度：</span>
+              <input class="form-control w-75" type="text" id="formHeight" value="0.5" onchange='blockEdit();'/>
+            </div>
+>>>>>>> 83933f3f7c853d5e87fbc3a915bb51a0f586df97
             <div class="d-flex justify-content-around align-items-center mb-3"  id="objValue2Container">
               <span id="objValue2">左右移動範圍：</span>
               <input class="form-control w-75" type="text" id="formHeight" value="150" onchange='blockEdit();'/>
@@ -196,7 +204,6 @@
       <button class="keyboard-bottom" ontouchstart="KeyDown({keyCode:40})">下</button>
     </scetion>
   </footer>
-
 </body>
 <script src="export.js"></script>
-<script src="edittest.js"></script>
+<script src="edit.js"></script>
