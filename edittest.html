@@ -114,13 +114,17 @@
   <section class="d-flex container-wrapper flex-wrap justify-content-around">
     <section class="flex-grow-1 h-100 container-left-wrapper">
       <section class="images-wrapper h-50">
-        <div class="images-container">
-          <img src="yellow.png" alt="yellow" onclick="chooseColor='yellow';NowObj=-1;setControl();"
-            onchange="blockEdit();" />
-          <img src="green.png" alt="green" onclick="chooseColor='green';NowObj=-1;setControl();"
-            onchange="blockEdit();" />
-          <img src="red2.png" alt="red2" onclick="chooseColor='red2';NowObj=-1;setControl();" onchange="blockEdit();" />
-          <img src="blue.png" alt="blue" onclick="chooseColor='blue';NowObj=-1;setControl();" onchange="blockEdit();" />
+        <div class="images-container"> <img src='yellow.png' alt='yellow'
+            onclick="chooseColor='yellow';NowObj=-1;setControl();blockEdit();" onchange='blockEdit();'>
+          <img src='green.png' alt='green' onclick="chooseColor='green';NowObj=-1;setControl();"
+            onchange='blockEdit();blockEdit();'>
+          <img src='red2.png' alt='red2' onclick="chooseColor='red2';NowObj=-1;setControl();blockEdit();" onchange='blockEdit();'>
+          <img src='blue.png' alt='blue' onclick="chooseColor='blue';NowObj=-1;setControl();blockEdit();" onchange='blockEdit();'>
+          <img src='laserblock.png' alt='laser' onclick="chooseColor='laser';NowObj=-1;setControl();blockEdit();" onchange='blockEdit();'>
+          <img src='magnet1.png' alt='magnet1' width='50' height='50'
+            onclick="chooseColor='magnet1';NowObj=-1;setControl();blockEdit();">
+          <img src='magnet2.png' alt='magnet2' width='50' height='50'
+            onclick="chooseColor='magnet2';NowObj=-1;setControl();blockEdit();" onchange='blockEdit();'>
         </div>
       </section>
       <section class="form-wrapper h-50">
@@ -128,31 +132,47 @@
           <form class="w-25 m-0" id='form'>
             <div class="d-flex justify-content-around align-items-center mb-3">
               <span>名稱：</span>
-              <input class="form-control w-75" type="text" id="formName" value="yellow" />
+              <input type="input" class="form-control w-75" type="text" id="formName" value="yellow" onchange='blockEdit();'/>
             </div>
             <div class="d-flex justify-content-around align-items-center mb-3">
               <span> 座標X：</span>
-              <input class="form-control w-75" type="text" id="formX" value="N" />
+              <input class="form-control w-75" type="text" id="formX" value="N" onchange='blockEdit();'/>
             </div>
             <div class="d-flex justify-content-around align-items-center mb-3">
               <span> 座標Y：</span>
-              <input class="form-control w-75" type="text" id="formY" value="N" />
+              <input class="form-control w-75" type="text" id="formY" value="N" onchange='blockEdit();'/>
             </div>
             <div class="d-flex justify-content-around align-items-center mb-3">
               <span>寬度：</span>
-              <input class="form-control w-75" type="text" id="formWidth" value="50" />
+              <input class="form-control w-75" type="text" id="formWidth" value="50" onchange='blockEdit();'/>
             </div>
             <div class="d-flex justify-content-around align-items-center mb-3">
               <span>高度：</span>
-              <input class="form-control w-75" type="text" id="formHeight" value="50" />
+              <input class="form-control w-75" type="text" id="formHeight" value="50" onchange='blockEdit();'/>
             </div>
             <div class="d-flex justify-content-around align-items-center mb-3">
               <span>路徑：</span>
-              <input class="form-control w-75" type="text" disabled="disabled" id="formPath" value="yellow.png" />
+              <input class="form-control w-75" type="text" disabled="disabled" id="formPath" value="yellow.png" onchange='blockEdit();'/>
             </div>
+            <!-- <div class="d-flex justify-content-around align-items-center mb-3"  id="objValue1Container">
+              <span id="objValue1">速度：</span>
+              <input class="form-control w-75" type="text" id="formHeight" value="0.5" onchange='blockEdit();'/>
+            </div>
+            <div class="d-flex justify-content-around align-items-center mb-3"  id="objValue2Container">
+              <span id="objValue2">左右移動範圍：</span>
+              <input class="form-control w-75" type="text" id="formHeight" value="150" onchange='blockEdit();'/>
+            </div>
+            <div class="d-flex justify-content-around align-items-center mb-3"  id="objValue2Container">
+              <span id="objValue2">左右移動範圍：</span>
+              <input class="form-control w-75" type="text" id="formHeight" value="150" onchange='blockEdit();'/>
+            </div>
+            <div class="d-flex justify-content-around align-items-center mb-3"  id="objValue2Container">
+              <span id="objValue2">左右移動範圍：</span>
+              <input class="form-control w-75" type="text" id="formHeight" value="150" onchange='blockEdit();'/>
+            </div> -->
             <div class="d-flex justify-content-around align-items-center mb-3">
               <label>座標修正 </label><input type="checkbox" checked="true" id="AutoPoint" style="transform : scale(2); " />
-              <button onclick="download(String(asdHappyCopy()), 'myfilename.html', 'text/plain');"
+              <button type="button" onclick="download(String(asdHappyCopy()), 'myfilename.html', 'text/plain');"
                 class="btn btn-secondary">
                 輸出
               </button>
