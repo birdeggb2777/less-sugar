@@ -49,11 +49,17 @@
             isFailFunctionRunning=true; 
             resetPlayer();
             await playerFailAnimate();
-            isFailFunctionRunning=false;
+            //isFailFunctionRunning=false;
             window.location.reload();
           }
         function winfunction() {
+            if(isFailFunctionRunning){
+                return;
+            }
             /*AllObject[0].pointY = 0;
+            if(isFailFunctionRunning){
+                return;
+            }
             placeDirection[0] = 0;
             placeDirection[1] = 0;
             for (var i in AllObject) {
