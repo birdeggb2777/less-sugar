@@ -492,6 +492,7 @@ function chooseBlock() {
         try {
           getByID('objValue4').value = AllObject[i].objValue3;
           getByID('objValue1').value = AllObject[i].speed;
+          getByID('objValue2').value = AllObject[i].objValue;
         } catch (ex) { }
         // alert("");
         tempImg = AllObject[i].Image;
@@ -502,6 +503,7 @@ function chooseBlock() {
     }
   }
   chooseLaser();
+  chooseshoot();
 }
 function chooseLaser() {
   if (tempImg == laserBlockImg) {
@@ -513,15 +515,8 @@ function chooseLaser() {
     this.getByID(`objValue${4}Container`).classList.remove('d-none');
     this.getByID(`objValue${1}Container`).classList.add('d-flex');
     this.getByID(`objValue${4}Container`).classList.add('d-flex');
-  } else {
-    for (let index = 1; index < 4 + 1; index++) {
-      this.getByID(`objValue${index}Container`).classList.remove('d-flex')
-      this.getByID(`objValue${index}Container`).classList.add('d-none');
-    }
   }
-}
-function chooseLaser() {
-  if (tempImg == shootImg) {
+  else if (tempImg == shootImg) {
     for (let index = 1; index < 4 + 1; index++) {
       this.getByID(`objValue${index}Container`).classList.remove('d-flex');
       this.getByID(`objValue${index}Container`).classList.add('d-none');
@@ -532,13 +527,15 @@ function chooseLaser() {
     this.getByID(`objValue${1}Container`).classList.add('d-flex');
     this.getByID(`objValue${4}Container`).classList.add('d-flex');
     this.getByID(`objValue${2}Container`).classList.add('d-flex');
-  } else {
+  }
+  else {
     for (let index = 1; index < 4 + 1; index++) {
       this.getByID(`objValue${index}Container`).classList.remove('d-flex')
       this.getByID(`objValue${index}Container`).classList.add('d-none');
     }
   }
 }
+
 function MouseMove(e) {
   downCheck = false;
   chooseX = e.offsetX;
@@ -681,16 +678,16 @@ function MouseUp(e) {
           this.objValue = laserMin;
         }
         if (this.Image == shootImg) {
-          this.objValue2 += 1;
-          if (this.objValue2 > this.objValue) this.objValue2 = -1;
-          else if (this.objValue2 == 0) {
+          if (this.timeclock == undefined) this.timeclock = 0;
+          this.timeclock += 1;
+          if (this.timeclock > this.objValue) this.timeclock = -1;
+          else if (this.timeclock == 0) {
             createShootElement(this.pointX + (this.width / 2), this.pointY + (this.height / 2));
           }
-          /* this.objValue2 += 1;
-           if (this.objValue2 > this.objValue3) this.objValue2 = -this.objValue3;
-           if (this.objValue2 > 0) this.pointX += this.speed;
-           else if (this.objValue2 < 0) this.pointX -= this.speed;
- */
+          this.objValue2 += 1;
+          if (this.objValue2 > this.objValue3) this.objValue2 = -this.objValue3;
+          if (this.objValue2 > 0) this.pointX += this.speed;
+          else if (this.objValue2 < 0) this.pointX -= this.speed;
         }
       },
       pounch: function () {
@@ -846,8 +843,8 @@ function AutoEditPointY(chooseX, chooseY) {
   return chooseY;
 }
 function createShootElement(x, y) {
-  var sqr2=Math.sqrt(2)/2;
-  var list = [[sqr2, sqr2], [1, 0], [-1, 0], [-sqr2, -sqr2], [0, -1],[sqr2,-sqr2], [-sqr2,sqr2],[0, 1]];
+  var sqr2 = Math.sqrt(2) / 2;
+  var list = [[sqr2, sqr2], [1, 0], [-1, 0], [-sqr2, -sqr2], [0, -1], [sqr2, -sqr2], [-sqr2, sqr2], [0, 1]];
   for (var l in list) {
     let obj = {
       name: "shoot",

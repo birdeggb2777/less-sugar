@@ -62,7 +62,7 @@ function asdHappyCopy() {
         laserImg.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/laser.png';
         laserImg.alt = 'laserImg';
         let shootImg = new Image();
-        shootImg.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/laserblock.png';
+        shootImg.src = 'https://raw.githubusercontent.com/birdeggb2777/less-sugar/master/shootblock.png';
         shootImg.alt = 'shootblockImg';
         window.addEventListener('keydown', KeyDown, true);
         window.addEventListener('keyup', KeyUp, true);
