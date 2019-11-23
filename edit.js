@@ -17,6 +17,7 @@ window.onload = function () {
     this.getByID(`objValue${index}Container`).classList.add('d-none');
   }
 }
+
 function download(text, name, type) {
   //下載檔案 點擊輸出 後 出現的下載超連接的事件
   let a = document.getElementById("a");
@@ -93,6 +94,7 @@ function blockEdit() {
 }
 ///////////////////
 let magnetSpeed = 0;
+let isMobile = false;
 //////////////////
 let NowObj = 0;
 let rulerPoint = 0;
@@ -786,3 +788,13 @@ function AutoEditPointY(chooseX, chooseY) {
   }
   return chooseY;
 }
+~(function getDeviceType() {
+  //主動執行
+  const u = navigator.userAgent,
+    isAndroid = u.indexOf("Android") > -1 || u.indexOf("Adr") > -1,
+    isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+  if (isAndroid || isiOS) {
+    isMobile = true;
+    document.querySelector('footer .mobi-toy-wrapper').style.display='flex';
+  }
+})();

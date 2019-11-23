@@ -1,406 +1,202 @@
-﻿<span style="font-size: large;"></span>
-<canvas height="550" id="game" width="750"></canvas>
-<input type="button" value="重新開始" onclick="restart();">
-<script>
-    let rulerPoint = 0;
-    let chooseColor = 'yellow';
-    let chooseX = 0;
-    let chooseY = 0;
-    let downCheck = false;
-    let oCanvas = document.getElementById("game"),
-        ctx = oCanvas.getContext("2d");
-    window.addEventListener('keydown', KeyDown, true);
-    window.addEventListener('keyup', KeyUp, true);
-    oCanvas.addEventListener("mousedown", MouseDown, true);
-    oCanvas.addEventListener("mousemove", MouseMove, true);
-    oCanvas.addEventListener("mouseup", MouseUp, true);
-    let Me = {
-        myX: 50,
-        myY: 400,
-        myW: 45,
-        myH: 45,
-        meRight: false,
-        meLeft: false,
-        meUp: false,
-        meDown: false,
-        autoDown: 0.0
-    };
-    let blocks = {
-        yellow:
-        {
-            pointX: [50, 100, 150, 200, 250, 300, 350, 400, 450,
-                950, 1000, 1050, 1100, 1250, 1350,
-                1450, 1500, 1600, 1750, 1800, 1850, 1900, 1950, 2000
-            ],
-            pointY: [450, 450, 450, 450, 450, 450, 450, 450, 450,
-                220, 220, 220, 220, 220, 220,
-                450, 450, 320, 430, 430, 430, 430, 430, 430
-            ]
-        },
-        blue:
-        {
-            pointX: [550, 700, 850, 1400,
-                1550],
-            pointY: [380, 320, 260, 220,
-                350]
-        },
-        red2:
-        {
-            pointX: [550, 600, 650, 700, 750, 800, 850, 900, 500,
+﻿<style>
+  .container-wrapper {
+    margin: auto;
+    padding: 30px 0;
+    min-height: 100vh;
+  }
 
-                1470, 1520, 1570, 1620],
-            pointY: [450, 450, 450, 450, 450, 450, 450, 450, 450,
+  .images-wrapper {
+    padding: 30px;
+    background-color: rgba(0, 0, 0, .6);
+  }
 
-                210, 210, 210, 210]
-        },
-        green:
-        {
-            pointX: [2050],
-            pointY: [430]
-        }
-    }
-    let TX = [500, 600, 400, 200, 150, 100, 50, 100],
-        TY = [620, 550, 500, 500, 500, 500, 550, 370];
-    let TW = 50,
-        TH = 50;
-    let upCount = 0;
-    let win = false;
+  .images-wrapper .images-container {
+    min-height: 100%;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, .3);
+  }
 
-    for (var i = 0; i < 750; i += 50) {
-        TX.push(i);
-        TY.push(0);
-    }
-    for (var i = 0; i < 750; i += 50) {
-        TX.push(i);
-        TY.push(750 - 50);
-    }
-    for (var i = 0; i < 750; i += 50) {
-        TX.push(0);
-        TY.push(i);
-    }
-    for (var i = 0; i < 750; i += 50) {
-        TX.push(750 - 50);
-        TY.push(i);
-    }
-    var timeoutID = window.setInterval(function () {
-        if (win == true) return;
-        let speed = 1.5;
-        if (Me.myY >= 600) {
-            alert("fail");
-            restart();
-        }
-        if (Me.meUp == true) {
-            if (true || upCount <= 90 && pounch0(Me.myX, Me.myY - speed, Me.myW, Me.myH) == false) {
-                Me.myY -= speed;
-                upCount++;
-            } else {
-                Me.meUp = false;
-            }
-            // if (upCount >= 2050) Me.meUp = false;
+  .form-wrapper {
+    padding: 30px;
+    background-color: rgba(0, 0, 0, .6);
+  }
 
-        }
+  .form-wrapper .form-container {
+    min-height: 100%;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, .3);
+  }
 
-        if (Me.meRight == true) {
-            if (true || pounch0(Me.myX + speed, Me.myY, Me.myW, Me.myH) == false) {
-                if (Me.myX <= 450) { Me.myX += speed; }
-                else {
-                    rulerPoint++;
-                    for (var i in blocks.blue.pointX) {
-                        blocks.blue.pointX[i] -= 1;
-                    }
-                    for (var i in blocks.red2.pointX) {
-                        blocks.red2.pointX[i] -= 1;
-                    }
-                    for (var i in blocks.green.pointX) {
-                        blocks.green.pointX[i] -= 1;
-                    }
-                    for (var i in blocks.yellow.pointX) {
-                        blocks.yellow.pointX[i] -= 1;
-                    }
-                }
-            } else {
-                //   Me.meRight = false;
-            }
-        }
-        if (Me.meLeft == true) {
-            if (true || pounch0(Me.myX - speed, Me.myY, Me.myW, Me.myH) == false) {
-                for (var i in blocks.blue.pointX) {
-                    rulerPoint--;
-                    blocks.blue.pointX[i] += 1;
-                }
-                for (var i in blocks.yellow.pointX) {
-                    blocks.yellow.pointX[i] += 1;
-                }
-                for (var i in blocks.red2.pointX) {
-                    blocks.red2.pointX[i] += 1;
-                }
-                for (var i in blocks.green.pointX) {
-                    blocks.green.pointX[i] += 1;
-                }
-            } else {
-                // Me.meLeft = false;
-            }
-        }
-        if (Me.meDown == true) {
-            if (true || pounch0(Me.myX, Me.myY + speed, Me.myW, Me.myH) == false) {
-                Me.myY += speed;
-            } else {
-                //  Me.meDown = false;
-            }
-        }
-        if (Me.autoDown > 0) {
-            if (false && pounch0(Me.myX, Me.myY + Me.autoDown, Me.myW, Me.myH) == false) {
-                Me.myY += Me.autoDown;
-            } else {
-                // Me.meUp = false;
-            }
-        }
-        /* if (pounch(Me.myX, Me.myY, Me.myW, Me.myH, 200, 600, 1, 10) == true) {
-             win = true;
-             alert("win");
-         }*/
-    }, 1);
-    function MouseDown(e) {
-        chooseX = e.clientX;
-        chooseY = e.clientY;
-        downCheck = true;
-        // blocks.yellow.pointX.push(e.clientX-25);
-        //blocks.yellow.pointY.push(e.clientY-25);
-        if (e.clientX < 50 && e.clientY < 50)
-            chooseColor = 'yellow';
-        else if (e.clientX < 50 && e.clientY < 100)
-            chooseColor = 'red2';
-        else if (e.clientX < 50 && e.clientY < 150)
-            chooseColor = 'green';
-        else if (e.clientX < 50 && e.clientY < 200)
-            chooseColor = 'blue';
+  .preview-wrapper {
+    padding: 30px;
+    width: min-content;
+    height: min-content;
+    background-color: rgba(0, 0, 0, .6);
+  }
+
+  .preview-wrapper canvas {
+    background-color: rgba(255, 255, 255, .3);
+  }
+
+  #bg {
+    background: url('bg.jpg') no-repeat fixed right;
+    width: 100vw;
+    height: 100vh;
+    right: 0;
+    background-size: cover;
+    position: fixed;
+    z-index: -1;
+    opacity: 0.5;
+  }
 
 
-        //ctx.drawImage(yelloImg, e.clientX - 25, e.clientY - 25, 50, 50);
-    }
-    function MouseMove(e) {
-        chooseX = e.clientX;
-        chooseY = e.clientY;
-        if (downCheck == true && chooseColor == 'yellow') {
-            ctx.drawImage(yelloImg, e.clientX - 25, e.clientY - 25, 50, 50);
-        }
-        if (downCheck == true && chooseColor == 'red2') {
-            ctx.drawImage(redImg2, e.clientX - 25, e.clientY - 25, 50, 50);
-        }
-        if (downCheck == true && chooseColor == 'green') {
-            ctx.drawImage(greenImg, e.clientX - 25, e.clientY - 25, 50, 50);
-        }
-        if (downCheck == true && chooseColor == 'blue') {
-            ctx.drawImage(blueImg, e.clientX - 25, e.clientY - 25, 50, 50);
-        }
-    }
-    function MouseUp(e) {
-        chooseX = e.clientX;
-        chooseY = e.clientY;
-        if (downCheck == true) {
-            downCheck = false;
-            if (chooseColor == 'yellow') {
-                blocks.yellow.pointX.push(e.clientX - 25);
-                blocks.yellow.pointY.push(e.clientY - 25);
-            }
-            if (chooseColor == 'red2') {
-                blocks.red2.pointX.push(e.clientX - 25);
-                blocks.red2.pointY.push(e.clientY - 25);
-            }
-            if (chooseColor == 'green') {
-                blocks.green.pointX.push(e.clientX - 25);
-                blocks.green.pointY.push(e.clientY - 25);
-            }
-            if (chooseColor == 'blue') {
-                blocks.blue.pointX.push(e.clientX - 25);
-                blocks.blue.pointY.push(e.clientY - 25);
-            }
-        }
-    }
-    var yelloImg = new Image();
-    yelloImg.src = 'yellow.png';
-    var blueImg = new Image();
-    blueImg.src = 'blue.png';
-    var redImg2 = new Image();
-    redImg2.src = 'red2.png';
-    var greenImg = new Image();
-    greenImg.src = 'green.png';
-    var timeoutID = window.setInterval(function () {
-        ctx.beginPath();
-
-        ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
-        ctx.fillStyle = "red";
-        ctx.rect(Me.myX, Me.myY, Me.myW, Me.myH);
-        ctx.fill();
-        /* ctx.lineWidth = 5;
-         ctx.strokeStyle = "#FF0000";
-         ctx.rect(200, 600, TW, TH);
-         ctx.stroke();*/
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = "#222222";
-        /* for (var i = 0; i < TX.length; i++) {
-             ctx.rect(TX[i], TY[i], TW, TH);
-         }*/
-        for (var i in blocks.yellow.pointX) {
-            var block0 = blocks.yellow;
-            ctx.drawImage(yelloImg, block0.pointX[i], block0.pointY[i], 50, 50);
-        }
-        for (var i in blocks.blue.pointX) {
-            var block0 = blocks.blue;
-            ctx.drawImage(blueImg, block0.pointX[i], block0.pointY[i], 50, 50);
-        }
-        for (var i in blocks.red2.pointX) {
-            var block0 = blocks.red2;
-            ctx.drawImage(redImg2, block0.pointX[i], block0.pointY[i], 50, 50);
-        }
-        for (var i in blocks.green.pointX) {
-            var block0 = blocks.green;
-            ctx.drawImage(greenImg, block0.pointX[i], block0.pointY[i], 50, 50);
-        }
-        ctx.drawImage(yelloImg, 0, 0, 50, 50);
-        ctx.drawImage(redImg2, 0, 50, 50, 50);
-        ctx.drawImage(greenImg, 0, 100, 50, 50);
-        ctx.drawImage(blueImg, 0, 150, 50, 50);
-        if (downCheck == true && chooseColor == 'yellow') {
-            ctx.drawImage(yelloImg, chooseX - 25,chooseY - 25, 50, 50);
-        }
-        if (downCheck == true && chooseColor == 'red2') {
-            ctx.drawImage(redImg2,chooseX - 25,chooseY - 25, 50, 50);
-        }
-        if (downCheck == true && chooseColor == 'green') {
-            ctx.drawImage(greenImg, chooseX - 25,chooseY - 25, 50, 50);
-        }
-        if (downCheck == true && chooseColor == 'blue') {
-            ctx.drawImage(blueImg, chooseX - 25,chooseY - 25, 50, 50);
-        }
-        ctx.stroke();
-        // ctx.drawImage(yelloImg, 200, 200,50,50);
-        ctx.closePath();
-
-    }, 20);
+  #form div:last-of-type {
+    margin-bottom: 0 !important;
+  }
 
 
-    function KeyDown(e) {
-        var keyID = e.keyCode ? e.keyCode : e.which;
-        //if (Me.meUp == false && Me.meRight == false && Me.meDown == false && Me.meLeft == false) {
-        if ((keyID === 38 || keyID === 87) /*|| pounch0(Me.myX, Me.myY + 2, Me.myW, Me.myH) == true*/) { // up arrow and W 
-            Me.meUp = true;
-            upCount = 0;
-        }
-        if (keyID === 39 || keyID === 68) { // right arrow and D 
-            Me.meRight = true;
-        }
-        if (keyID === 40 || keyID === 83) { // down arrow and S 
-            Me.meDown = true;
-        }
-        if (keyID === 37 || keyID === 65) { // left arrow and A 
-            Me.meLeft = true;
-        }
-        //}
+  @media screen and (max-width: 1140px) {
+    .container-left-wrapper {
+      max-width: 810px;
     }
 
-    function KeyUp(e) {
-        var keyID = e.keyCode ? e.keyCode : e.which;
-        if (keyID === 38 || keyID === 87) { // up arrow and W 
-            Me.meUp = false;
-        }
-        if (keyID === 39 || keyID === 68) { // right arrow and D 
-            Me.meRight = false;
-        }
-        if (keyID === 40 || keyID === 83) { // down arrow and S 
-            Me.meDown = false;
-        }
-        if (keyID === 37 || keyID === 65) { // left arrow and A 
-            Me.meLeft = false;
-        }
+    .container-wrapper {
+      flex-wrap: wrap;
     }
+  }
 
-    function pounch(x, y, w, h, x2, y2, w2, h2) {
-        if (y + h >= y2 && x + w >= x2 && y < y2 + h2 && x < x2 + w2)
-            return true;
-        return false;
-    }
+  .wordArt {
+    font-family: 'Mansalva', cursive;
+  }
 
-    function pounch0(x, y, w, h) {
-        for (var i in blocks.yellow.pointX) {
-            var block0 = blocks.yellow;
-            if (pounch(x, y, w, h, block0.pointX[i], block0.pointY[i], TW, TH) == true)
-                return true;
-        }
-        for (var i in blocks.blue.pointX) {
-            var block0 = blocks.blue;
-            if (pounch(x, y, w, h, block0.pointX[i], block0.pointY[i], TW, TH) == true) {
-                if (block0.pointY[i] > Me.myY)
-                    block0.pointY[i] += 1;
-                return true;
-            }
-        }
-        for (var i in blocks.red2.pointX) {
-            var block0 = blocks.red2;
-            if (pounch(x, y, w, h, block0.pointX[i], block0.pointY[i], TW, TH) == true) {
-                win = true;
-                alert("fail");
-                restart();
-                return true;
-            }
-        }
-        for (var i in blocks.green.pointX) {
-            var block0 = blocks.green;
-            if (pounch(x, y, w, h, block0.pointX[i], block0.pointY[i], TW, TH) == true) {
-                alert("win");
-                win = true;
-                return true;
-            }
-        }
-        return false;
-    }
-    function restart() {
-        Me = {
-            myX: 50,
-            myY: 400,
-            myW: 45,
-            myH: 45,
-            meRight: false,
-            meLeft: false,
-            meUp: false,
-            meDown: false,
-            autoDown: 0.5
-        };
-        blocks = {
-            yellow:
-            {
-                pointX: [50, 100, 150, 200, 250, 300, 350, 400, 450,
-                    950, 1000, 1050, 1100, 1250, 1350,
-                    1450, 1500, 1600, 1750, 1800, 1850, 1900, 1950, 2000
-                ],
-                pointY: [450, 450, 450, 450, 450, 450, 450, 450, 450,
-                    220, 220, 220, 220, 220, 220,
-                    450, 450, 320, 430, 430, 430, 430, 430, 430
-                ]
-            },
-            blue:
-            {
-                pointX: [550, 700, 850, 1400,
-                    1550],
-                pointY: [380, 320, 260, 220,
-                    350]
-            },
-            red2:
-            {
-                pointX: [550, 600, 650, 700, 750, 800, 850, 900, 500,
+  .mobi-toy-wrapper {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    display: none;
+    align-items: center;
+    justify-content: space-around;
+    margin: 50px 0;
+    border: 0;
+    width: 810px;
+    height: 210px;
+    background: radial-gradient(transparent, skyblue);
+    transform: translateX(-50%);
+  }
 
-                    1470, 1520, 1570, 1620],
-                pointY: [450, 450, 450, 450, 450, 450, 450, 450, 450,
+  .mobi-toy-wrapper>[class^='keyboard'] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+    border-radius: 50%;
+    width: 130px;
+    height: 130px;
+    font-size: 42px;
+    font-weight: 900;
+    color: black;
+  }
 
-                    210, 210, 210, 210]
-            },
-            green:
-            {
-                pointX: [2050],
-                pointY: [430]
-            }
-        }
-        win = false;
-    }
+  .mobi-toy-wrapper>[class^='keyboard']:hover {
+    background: gray;
+  }
+</style>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+  integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css?family=Mansalva&display=swap" rel="stylesheet">
 
-</script>
+<body style="padding-bottom:150px;">
+  <div id='bg'></div>
+  <section class="d-flex container-wrapper justify-content-around">
+    <section class="h-100 container-left-wrapper">
+      <section class="images-wrapper h-50">
+        <div class="images-container"> <img src='./assets/images/yellow.png' alt='yellow'
+            onclick="chooseColor='yellow';NowObj=-1;setControl();blockEdit();" onchange='blockEdit();'>
+          <img src='./assets/images/green.png' alt='green' onclick="chooseColor='green';NowObj=-1;setControl();"
+            onchange='blockEdit();blockEdit();'>
+          <img src='./assets/images/red2.png' alt='red2' onclick="chooseColor='red2';NowObj=-1;setControl();blockEdit();"
+            onchange='blockEdit();'>
+          <img src='./assets/images/blue.png' alt='blue' onclick="chooseColor='blue';NowObj=-1;setControl();blockEdit();"
+            onchange='blockEdit();'>
+          <img src='./assets/images/laserblock.png' alt='laser' onclick="chooseColor='laser';NowObj=-1;setControl();blockEdit();"
+            onchange='blockEdit();'>
+          <img src='./assets/images/magnet1.png' alt='magnet1' width='50' height='50'
+            onclick="chooseColor='magnet1';NowObj=-1;setControl();blockEdit();">
+          <img src='./assets/images/magnet2.png' alt='magnet2' width='50' height='50'
+            onclick="chooseColor='magnet2';NowObj=-1;setControl();blockEdit();" onchange='blockEdit();'>
+        </div>
+      </section>
+      <section class="form-wrapper h-50">
+        <div class="form-container">
+          <form class="m-0" id='form'>
+            <div class="d-flex justify-content-around align-items-center mb-3">
+              <span>名稱：</span>
+              <input type="input" class="form-control w-75" type="text" id="formName" value="yellow"
+                onchange='blockEdit();' />
+            </div>
+            <div class="d-flex justify-content-around align-items-center mb-3">
+              <span> 座標X：</span>
+              <input class="form-control w-75" type="text" id="formX" value="N" onchange='blockEdit();' />
+            </div>
+            <div class="d-flex justify-content-around align-items-center mb-3">
+              <span> 座標Y：</span>
+              <input class="form-control w-75" type="text" id="formY" value="N" onchange='blockEdit();' />
+            </div>
+            <div class="d-flex justify-content-around align-items-center mb-3">
+              <span>寬度：</span>
+              <input class="form-control w-75" type="text" id="formWidth" value="50" onchange='blockEdit();' />
+            </div>
+            <div class="d-flex justify-content-around align-items-center mb-3">
+              <span>高度：</span>
+              <input class="form-control w-75" type="text" id="formHeight" value="50" onchange='blockEdit();' />
+            </div>
+            <div class="d-flex justify-content-around align-items-center mb-3">
+              <span>路徑：</span>
+              <input class="form-control w-75" type="text" disabled="disabled" id="formPath" value="./assets/images/yellow.png"
+                onchange='blockEdit();' />
+            </div>
+            <!-- <div class="d-flex justify-content-around align-items-center mb-3"  id="objValue1Container">
+              <span id="objValue1">速度：</span>
+              <input class="form-control w-75" type="text" id="formHeight" value="0.5" onchange='blockEdit();'/>
+            </div>
+            <div class="d-flex justify-content-around align-items-center mb-3"  id="objValue2Container">
+              <span id="objValue2">左右移動範圍：</span>
+              <input class="form-control w-75" type="text" id="formHeight" value="150" onchange='blockEdit();'/>
+            </div>
+            <div class="d-flex justify-content-around align-items-center mb-3"  id="objValue2Container">
+              <span id="objValue2">左右移動範圍：</span>
+              <input class="form-control w-75" type="text" id="formHeight" value="150" onchange='blockEdit();'/>
+            </div>
+            <div class="d-flex justify-content-around align-items-center mb-3"  id="objValue2Container">
+              <span id="objValue2">左右移動範圍：</span>
+              <input class="form-control w-75" type="text" id="formHeight" value="150" onchange='blockEdit();'/>
+            </div> -->
+            <div class="d-flex justify-content-around align-items-center mb-3">
+              <label>座標修正 </label><input type="checkbox" checked="true" id="AutoPoint" style="transform : scale(2); " />
+              <button type="button" onclick="download(String(asdHappyCopy()), 'myfilename.html', 'text/plain');"
+                class="btn btn-secondary">
+                輸出
+              </button>
+              <a href="" id="a" style="display: none;">click here to download your file</a>
+            </div>
+          </form>
+        </div>
+      </section>
+      <h5 class="wordArt">the&nbsp;&nbsp;tools :)</h5>
+    </section>
+    <section class="preview-wrapper">
+      <canvas width="750" height="550" id="game"></canvas>
+      <h5 class="wordArt text-white text-right" style="font-size: 25px">game&nbsp;&nbsp;preview</h5>
+    </section>
+  </section>
+  <footer>
+    <scetion class="mobi-toy-wrapper">
+      <button class="keyboard-left" ontouchstart="KeyDown({keyCode:37})">左</button>
+      <button class="keyboard-top" ontouchstart="KeyDown({keyCode:38})">上</button>
+      <button class="keyboard-right" ontouchstart="KeyDown({keyCode:39})">右</button>
+      <button class="keyboard-bottom" ontouchstart="KeyDown({keyCode:40})">下</button>
+    </scetion>
+  </footer>
+</body>
+<script src="export.js"></script>
+<script src="edit.js"></script>
